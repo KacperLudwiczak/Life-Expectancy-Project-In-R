@@ -1,0 +1,511 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Projekt R markdown},
+  pdfauthor={Kacper Ludwiczak},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Projekt R markdown}
+\author{Kacper Ludwiczak}
+\date{2023-03-10}
+
+\begin{document}
+\maketitle
+
+Regression Model Projekt - Kacper Ludwiczak, 221303
+
+Temat: Kształtowanie się oczekiwanej długości życia dla większości
+państw świata na podstawie modelu regresji i czynniki wpływające na jego
+wysokość. Zaczynając projekt pracowałem na danych związanych z
+nowoczesnymi technologiami. Dokonałem czyszczenia danych, obliczeń w
+excelu oraz obliczeń w języku R. Projekty znajdują się pod nazwą ``Stary
+projekt - Reggresion Models'', ``Stary projekt -- Zestawienie'', ``Stary
+projekt w R''. Jednakże stwierdziłem, że wyniki nie są zadowalające i
+porzuciłem ten projekt. Następnie zacząłem prace nad tym modelem. Dane
+pozyskałem ze strony kaggle.com. Według strony dane pochodzą ze strony
+internetowej WHO i ONZ z pomocą Deeksha Russella i Duana Wanga. Dane
+dotyczą większości państw świata, ich różnych zbiorów informacji, np.
+Długość życia. Plik z oryginałem danych jest pod nazwą ``Life Expectancy
+Data''. Po pierwsze chciałem skupić się na próbie 30 krajów. Wybrałem
+zatem 30 krajów, metodą losową. Dane obliczyłem zarówno w excelu jak i w
+języku R. Dane i obliczenia znajdują się w pliku ``Projekt w R próba''
+oraz ``Projekt w Excel próba''. Uznałem, że lepszym pomysłem będzie
+stworzenie modelu z większości krajów na jakich dano było mi pracować.
+Zacząłem od pozostawienia tylko krajów z 2015 jako najbardziej
+aktualnych z danej bazy. Dane są pod nazwą ``Dane z 2015''. Następnie
+zamieniłem dane za pomocą funkcji ``Tekst jako kolumny''. Usunąłem
+kolumny ``Year'', ``Status'', ponieważ kolumny są mi niepotrzebne.
+Usunąłem kolumny ``Alcohol'', ``percentage expenditure'', ``Total
+expenditure'', ponieważ były zauważające braki danych. Usunąłem kolumny
+``BMI'', ``HIV/AIDS'', ``thinness 1-19 years'', ``thinness 5-9 years'',
+``Schooling'', ponieważ pojawiła mi się pewna anomalia. Podczas zamiany
+na kolumny niektóre dane są formacie daty, po zamienieniu ich na liczby
+pojawiały się błędne liczby. Również nie które liczby zamienione
+automatycznie są błędne. Po wielu nieudanych próbach rozwiązania tego
+problemu, dokonałem eliminacji tych kolumn. Również musiałem dokonać
+zamiany kropek na przecinki w liczbach oraz wypełnić puste pola średnią
+z reszty kolumny. Dane znajdują się w pliku ``Dane zrobione''. Również
+stworzyłem osobny plik dla importowania do RStudio, pod nazwą ``Dane do
+R''. Szczegóły dotyczące danych: • Country - Kraj • Year - Rok • Status
+- Stan rozwinięty lub rozwijający się • Life expectancy - Oczekiwana
+długość życia w latach • Adult Mortality - Wskaźniki śmiertelności
+dorosłych obu płci (prawdopodobieństwo śmierci w wieku od 15 do 60 lat
+na 1000 mieszkańców) • Infant deaths - Liczba zgonów niemowląt na 1000
+ludności • Alcohol - Spożycie alkoholu na mieszkańca (15+) (w litrach
+czystego alkoholu) • Hepatitis B - Zasięg szczepień przeciw wirusowemu
+zapaleniu wątroby typu B (HepB) wśród 1-latków (\%) • Measles -- Odra,
+liczba zgłoszonych przypadków na 1000 ludności • BMI - Średni wskaźnik
+masy ciała całej populacji • Under-five deaths - Liczba zgonów poniżej
+piątego roku życia na 1000 mieszkańców • Polio - Zasięg szczepień
+przeciw polio (Pol3) wśród 1-latków (\%) • Total expenditure - Wydatki
+sektora instytucji rządowych i samorządowych na zdrowie jako odsetek
+wydatków sektora instytucji rządowych i samorządowych ogółem (\%) •
+Diphtheria - Odsetek szczepień przeciwko anatoksynie błonicy i tężcowi
+oraz krztuścowi (DTP3) wśród 1-latków (\%) • HIV/AIDS - Zgony na 1000
+żywych urodzeń HIV/AIDS (0-4 lata) • GDP - Produkt Krajowy Brutto per
+capita (w USD) • Population - Ludność kraju • Thinness 1-19 years -
+Rozpowszechnienie szczupłości wśród dzieci i młodzieży w wieku od 10 do
+19 lat (\%) • Thinness 5-9 years - Występowanie szczupłości wśród dzieci
+w wieku od 5 do 9 lat (\%) • Income - Wskaźnik rozwoju społecznego pod
+względem struktury dochodów zasobów (wskaźnik w zakresie od 0 do 1) •
+Schooling- Liczba lat nauki (lata)
+
+Projekt w RStudio jest pod nazwą ``Projekt R markdown''
+
+Zainstalowałem pakiet ``readxl'', oraz uruchomiłem go przez funkcje
+``library''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(readxl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: pakiet 'readxl' został zbudowany w wersji R 4.2.2
+\end{verbatim}
+
+Kod wczytuje plik excel ``Dane do R.xlsx'' i zapisuje jego zawartość w
+zmiennej ``Dane''. Następnie wyświetla zawartość tej zmiennej za pomocą
+funkcji ``View()'', wyświetla nazwy kolumn danych za pomocą funkcji
+``names()'', a na końcu wyświetla wartości kolumny ``Life expectancy''
+za pomocą funkcji ``print()''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Dane }\OtherTok{\textless{}{-}}  \FunctionTok{read\_excel}\NormalTok{(}\StringTok{"C:/Users/Kacper/Desktop/Projekt Regression/Dane do R.xlsx"}\NormalTok{)}
+\FunctionTok{View}\NormalTok{(Dane)}
+\FunctionTok{names}\NormalTok{(Dane)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Life expectancy" "Adult Mortality" "Infant deaths"   "Hepatitis B"    
+##  [5] "Measles"         "Under-5 deaths"  "Polio"           "Diphtheria"     
+##  [9] "GDP"             "Population"      "Income"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(Dane}\SpecialCharTok{$}\StringTok{"Life expectancy"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1] 65.0 77.8 75.6 52.4 76.4 76.3 74.8 82.8 81.5 72.7 76.1 76.9 71.8 75.5 72.3
+##  [16] 81.1 71.0 60.0 69.8 77.0 77.4 65.7 75.0 77.7 74.5 59.9 59.6 73.3 68.7 57.3
+##  [31] 82.2 52.5 53.1 85.0 76.1 74.8 63.5 64.7 79.6 78.0 79.1 85.0 78.8 76.0 59.8
+##  [46] 86.0 63.5 73.9 76.2 79.0 73.5 58.2 64.7 77.6 64.8 69.9 81.1 82.4 66.0 61.1
+##  [61] 74.4 81.0 62.4 81.0 73.6 71.9 59.0 58.9 66.2 63.5 74.6 75.8 82.7 68.3 69.1
+##  [76] 75.5 68.9 81.4 82.5 82.7 76.2 83.7 74.1 72.0 63.4 66.3 74.7 71.1 65.7 74.6
+##  [91] 74.9 53.7 61.4 72.7 73.6 82.0 65.5 58.3 75.0 78.5 58.2 81.7 63.1 74.6 76.7
+## [106] 69.4 68.8 76.1 74.3 57.6 66.6 65.8 69.2 81.9 81.6 74.8 61.8 54.5 81.8 76.6
+## [121] 66.4 77.8 62.9 74.0 75.5 68.5 77.5 81.1 78.2 82.3 72.1 75.0 75.0 66.1 75.2
+## [136] 73.2 74.0 67.5 74.5 66.7 75.6 73.2 51.0 83.1 76.7 88.0 69.2 55.0 62.9 57.3
+## [151] 82.8 74.9 64.1 71.6 58.9 82.4 83.4 64.5 69.7 74.9 75.7 68.3 59.9 73.5 71.2
+## [166] 75.3 75.8 66.3 62.3 71.3 77.1 81.2 61.8 79.3 77.0 69.4 72.0 74.1 76.0 65.7
+## [181] 61.8 67.0
+\end{verbatim}
+
+Tutaj za pomocą funkcji ``colnames'' dokonałem zmiany nazw kolumn w celu
+szybszej pracy w dalszych etapach.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{colnames}\NormalTok{(Dane)}\OtherTok{\textless{}{-}}\FunctionTok{c}\NormalTok{(}\StringTok{"Life"}\NormalTok{,}\StringTok{"Adult\_M"}\NormalTok{,}\StringTok{"Infant\_D"}\NormalTok{,}\StringTok{"H\_B"}\NormalTok{,}\StringTok{"Measles"}\NormalTok{,}\StringTok{"Under\_D"}\NormalTok{,}\StringTok{"Polio"}\NormalTok{,}\StringTok{"Dipht"}\NormalTok{,}\StringTok{"GDP"}\NormalTok{,}\StringTok{"Popl"}\NormalTok{,}\StringTok{"Income"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Użyłem funkcji ``plot'' w celu zobaczeniu na wykresie dane z kolumny
+``Life''. Kolumna ``Life'' zostaje moją zmienną zależną, natomiast
+reszta kolumn zmiennymi niezależnymi.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(Dane}\SpecialCharTok{$}\StringTok{"Life"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Projekt-R-markdown_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+Sprawdziłem następujące wartości danych: • Minimalna wartość = 51.00 •
+Pierwszy kwartal = 65.85 • Mediana = 73.95 • Średnia = 71.72 • Trzeci
+kwartal = 76.97 • Maksymalna wartość = 88.00 , dla zmiennej zależnej.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(Dane}\SpecialCharTok{$}\StringTok{"Life"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   51.00   65.85   73.95   71.72   76.97   88.00
+\end{verbatim}
+
+W celu zobrazowania graficznego użyłem funkcji ``hist''. Według tego
+można zauważyć dominacje wartości w przedziale od 70 do 80.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(Dane}\SpecialCharTok{$}\StringTok{"Life"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Projekt-R-markdown_files/figure-latex/unnamed-chunk-6-1.pdf}
+Za pomocą funkcji ``cor'' przedstawiłem korelacje wszystkich zmiennych.
+Im dana liczba jest większa tym większa jest korelacja między
+odpowiadającymi danymi w wierszu i kolumnie. Można z niej ustalić, że
+korelacja między zmienną zależną ``Life'' a zmienną: • ``Adult\_M'' jest
+duża ujemnie • ``Infant\_D'' jest bardzo mała ujemnie • ``H\_B'' jest
+mała dodatnio • ``Measles'' jest bardzo mała ujemnie • ``Under\_D'' jest
+bardzo mała ujemnie • ``Polio'' jest średnia dodatnio • ``Dipht'' jest
+średnia dodatnio • ``GDP'' jest mała dodatnio • ``Popl'' jest bardzo
+mała ujemnie • ``Income'' jest bardzo mała ujemnie
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(Dane)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                 Life     Adult_M    Infant_D         H_B      Measles
+## Life      1.00000000 -0.77215206 -0.23984305  0.40450050 -0.077810464
+## Adult_M  -0.77215206  1.00000000  0.18604690 -0.23139939  0.054570792
+## Infant_D -0.23984305  0.18604690  1.00000000 -0.08681527  0.801663443
+## H_B       0.40450050 -0.23139939 -0.08681527  1.00000000  0.015656414
+## Measles  -0.07781046  0.05457079  0.80166344  0.01565641  1.000000000
+## Under_D  -0.27495588  0.21446481  0.99348313 -0.11001898  0.764990118
+## Polio     0.52186030 -0.37773277 -0.12958871  0.59020367 -0.028359472
+## Dipht     0.50655358 -0.32738699 -0.11788072  0.90925537 -0.001622602
+## GDP       0.43089742 -0.31610931 -0.11953200  0.13188477 -0.076143290
+## Popl     -0.04721323  0.03756295  0.26624483 -0.05672244  0.127925269
+## Income   -0.13196089  0.13031897  0.02150182 -0.08670694  0.008493532
+##              Under_D       Polio        Dipht         GDP         Popl
+## Life     -0.27495588  0.52186030  0.506553583  0.43089742 -0.047213234
+## Adult_M   0.21446481 -0.37773277 -0.327386992 -0.31610931  0.037562946
+## Infant_D  0.99348313 -0.12958871 -0.117880715 -0.11953200  0.266244826
+## H_B      -0.11001898  0.59020367  0.909255374  0.13188477 -0.056722444
+## Measles   0.76499012 -0.02835947 -0.001622602 -0.07614329  0.127925269
+## Under_D   1.00000000 -0.15154462 -0.143729736 -0.12620291  0.303720175
+## Polio    -0.15154462  1.00000000  0.661623315  0.22349572 -0.221071926
+## Dipht    -0.14372974  0.66162332  1.000000000  0.21333277 -0.065038775
+## GDP      -0.12620291  0.22349572  0.213332775  1.00000000  0.046037030
+## Popl      0.30372017 -0.22107193 -0.065038775  0.04603703  1.000000000
+## Income    0.05419071 -0.06262976 -0.100745256 -0.04756283 -0.007033844
+##                Income
+## Life     -0.131960889
+## Adult_M   0.130318973
+## Infant_D  0.021501816
+## H_B      -0.086706940
+## Measles   0.008493532
+## Under_D   0.054190707
+## Polio    -0.062629761
+## Dipht    -0.100745256
+## GDP      -0.047562832
+## Popl     -0.007033844
+## Income    1.000000000
+\end{verbatim}
+
+Kod ten oblicza korelację między kolumnami w obiekcie ``Dane'', z
+wyjątkiem pierwszej kolumny, która jest pomijana za pomocą wyrażenia
+``{[}, -1{]}''. Jest to kolumna ``Life''. Funkcja ``cor'' oblicza
+korelację Pearsona, czyli stopień zależności liniowej między dwoma
+zmiennymi. Wynik jest następnie zaokrąglany do trzech miejsc po
+przecinku za pomocą funkcji ``round''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{round}\NormalTok{(}\FunctionTok{cor}\NormalTok{(Dane[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]),}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          Adult_M Infant_D    H_B Measles Under_D  Polio  Dipht    GDP   Popl
+## Adult_M    1.000    0.186 -0.231   0.055   0.214 -0.378 -0.327 -0.316  0.038
+## Infant_D   0.186    1.000 -0.087   0.802   0.993 -0.130 -0.118 -0.120  0.266
+## H_B       -0.231   -0.087  1.000   0.016  -0.110  0.590  0.909  0.132 -0.057
+## Measles    0.055    0.802  0.016   1.000   0.765 -0.028 -0.002 -0.076  0.128
+## Under_D    0.214    0.993 -0.110   0.765   1.000 -0.152 -0.144 -0.126  0.304
+## Polio     -0.378   -0.130  0.590  -0.028  -0.152  1.000  0.662  0.223 -0.221
+## Dipht     -0.327   -0.118  0.909  -0.002  -0.144  0.662  1.000  0.213 -0.065
+## GDP       -0.316   -0.120  0.132  -0.076  -0.126  0.223  0.213  1.000  0.046
+## Popl       0.038    0.266 -0.057   0.128   0.304 -0.221 -0.065  0.046  1.000
+## Income     0.130    0.022 -0.087   0.008   0.054 -0.063 -0.101 -0.048 -0.007
+##          Income
+## Adult_M   0.130
+## Infant_D  0.022
+## H_B      -0.087
+## Measles   0.008
+## Under_D   0.054
+## Polio    -0.063
+## Dipht    -0.101
+## GDP      -0.048
+## Popl     -0.007
+## Income    1.000
+\end{verbatim}
+
+Kod ten tworzy macierz z danych zawartych w obiekcie ``Dane''. Wiersze z
+obiektu ``Dane'' są wczytywane za pomocą wyrażenia ``{[}, -1{]}'', co
+oznacza, że pierwsza kolumna jest pomijana. Jest to kolumna ``Life''.
+Następnie dane są konwertowane na macierz za pomocą funkcji
+``as.matrix''. Ostatecznie macierz jest przypisywana do obiektu
+``matrix''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(Dane[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+Kod oblicza własne wartości i wektory dla macierzy ``matrix''. Macierz
+jest najpierw transponowana za pomocą funkcji ``t'', a następnie mnożona
+przez siebie za pomocą operatora ``\%*\%``, co daje macierz kowariancji.
+Otrzymaną macierz kowariancji jest analizowana przez funkcję''eigen'',
+która oblicza własne wartości i wektory. Wynik jest przypisywany do
+obiektu ``matrix\_eigen''. Dzięki temu mogę zobaczyć własne wartości
+macierzy
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matrix\_eigen }\OtherTok{\textless{}{-}} \FunctionTok{eigen}\NormalTok{(}\FunctionTok{t}\NormalTok{(matrix) }\SpecialCharTok{\%*\%}\NormalTok{ matrix)}
+\NormalTok{matrix\_eigen}\SpecialCharTok{$}\NormalTok{val}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 1.365373e+17 2.887223e+10 1.122436e+10 6.501808e+06 1.227256e+06
+##  [6] 7.446202e+05 4.555312e+04 1.774313e+04 7.863299e+03 5.388979e+03
+\end{verbatim}
+
+Kod wylicza pierwiastek kwadratowy elementów ilorazu dwóch wektorów za
+pomocą ``sqrt''
+``matrix\_eigen\(val[1]” jest pierwszym elementem wektora “matrix_eigen\)val'',
+a ``matrix\_eigen\$val'' jest całym wektorem. Dostając następujące
+wyniki. Wyniki powyżej 30 wskazują na brak współliniowości. W moim
+przypadku można zauważyć, że współliniowość nie występuje. Na tym etapie
+można wykluczyć jako by mój model był dobrym modelem.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sqrt}\NormalTok{(matrix\_eigen}\SpecialCharTok{$}\NormalTok{val[}\DecValTok{1}\NormalTok{]}\SpecialCharTok{/}\NormalTok{matrix\_eigen}\SpecialCharTok{$}\NormalTok{val)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]       1.000    2174.631    3487.746  144913.411  333547.800  428211.415
+##  [7] 1731277.043 2774026.198 4166997.596 5033527.140
+\end{verbatim}
+
+Sprawdziłem na wykresie jaka jest korelacje zmiennej zależnej i zmiennej
+``Adult\_M'' w postaci graficznej. Tutaj przetestowałem funkcje ``lm''
+za pomocą stworzenia modelu prostej regresji liniowej z użyciem jednej
+zmiennej niezależnej. Funkcja ``abline'' umożliwiła mi dodanie
+niebieskiej linii regresji, która najdokładniej próbuje dopasować się do
+istniejących danych. Można zauważyć, że linia jest przekrzywiona w dół
+po stronie lewej, wynika to z pojawiających się wartości odstających,
+poniżej wartości 100 dla zmiennej niezależnej.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(Dane}\SpecialCharTok{$}\StringTok{"Life"}\SpecialCharTok{\textasciitilde{}}\NormalTok{Dane}\SpecialCharTok{$}\StringTok{"Adult\_M"}\NormalTok{)}
+\NormalTok{SimpleModel}\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Dane}\SpecialCharTok{$}\StringTok{"Life"}\SpecialCharTok{\textasciitilde{}}\NormalTok{Dane}\SpecialCharTok{$}\StringTok{"Adult\_M"}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(SimpleModel}\SpecialCharTok{$}\NormalTok{coef,}\AttributeTok{col=}\StringTok{"blue"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Projekt-R-markdown_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Wynik p-value wyszedł bardzo dobry. Jednakże wartość R-squared zbyt
+mała.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(SimpleModel)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Dane$Life ~ Dane$Adult_M)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -21.2282  -1.6823   0.7664   2.9876  11.2813 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  81.492535   0.709494   114.9   <2e-16 ***
+## Dane$Adult_M -0.064512   0.003957   -16.3   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.117 on 180 degrees of freedom
+## Multiple R-squared:  0.5962, Adjusted R-squared:  0.594 
+## F-statistic: 265.8 on 1 and 180 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Stworzenie pierwszego modelu. Używam metody ``Backward'' ręcznie.
+Eliminując zmienne o najwyższym wskaźniku p-value, tak długo aż model
+będzie zadawalający. Zakładam dla modelu, że poziom p-value poniżej 0.05
+jest odpowiedni.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Life}\SpecialCharTok{\textasciitilde{}}\NormalTok{Adult\_M}\SpecialCharTok{+}\NormalTok{Infant\_D}\SpecialCharTok{+}\NormalTok{H\_B}\SpecialCharTok{+}\NormalTok{Measles}\SpecialCharTok{+}\NormalTok{Under\_D}\SpecialCharTok{+}\NormalTok{Polio}\SpecialCharTok{+}\NormalTok{Dipht}\SpecialCharTok{+}\NormalTok{GDP}\SpecialCharTok{+}\NormalTok{Popl}\SpecialCharTok{+}\NormalTok{Income,}\AttributeTok{data=}\NormalTok{Dane)}
+\FunctionTok{summary}\NormalTok{(Model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Life ~ Adult_M + Infant_D + H_B + Measles + Under_D + 
+##     Polio + Dipht + GDP + Popl + Income, data = Dane)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -16.3833  -2.4605   0.2957   2.3275  11.8063 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  6.931e+01  1.761e+00  39.356  < 2e-16 ***
+## Adult_M     -4.718e-02  3.959e-03 -11.919  < 2e-16 ***
+## Infant_D     9.576e-02  4.644e-02   2.062 0.040728 *  
+## H_B         -9.270e-03  3.379e-02  -0.274 0.784131    
+## Measles      1.253e-05  7.851e-05   0.160 0.873375    
+## Under_D     -8.295e-02  3.440e-02  -2.412 0.016940 *  
+## Polio        5.024e-02  1.887e-02   2.662 0.008500 ** 
+## Dipht        6.339e-02  3.886e-02   1.631 0.104718    
+## GDP          1.202e-04  3.239e-05   3.712 0.000278 ***
+## Popl         2.531e-08  1.461e-08   1.732 0.085120 .  
+## Income       1.122e-02  3.531e-02   0.318 0.751148    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.346 on 171 degrees of freedom
+## Multiple R-squared:  0.7233, Adjusted R-squared:  0.7071 
+## F-statistic: 44.69 on 10 and 171 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\end{document}

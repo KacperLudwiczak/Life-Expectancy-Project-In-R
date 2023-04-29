@@ -1,0 +1,1755 @@
+---
+title: "Projekt CV"
+author: "Kacper Ludwiczak"
+date: "2023-03-14"
+output:
+  html_document: default
+---
+
+# Regression Model Projekt - Kacper Ludwiczak, 221303
+
+## Temat - Kształtowanie się oczekiwanej długości życia dla większości państw świata na podstawie modelu regresji i czynniki wpływające na jego wysokość.
+
+Zaczynając projekt pracowałem na danych związanych z nowoczesnymi technologiami. 
+Dokonałem czyszczenia danych, obliczeń w excelu oraz obliczeń w języku R.
+Projekty znajdują się pod nazwą “Stary projekt - Reggresion Models”, “Stary projekt – Zestawienie", “Stary projekt w R”. 
+Jednakże stwierdziłem, że wyniki nie są zadowalające i porzuciłem ten projekt.
+
+Następnie zacząłem prace nad tym modelem. Dane pozyskałem ze strony kaggle.com. 
+Według strony dane pochodzą ze strony internetowej WHO i ONZ z pomocą Deeksha Russella i Duana Wanga. 
+Dane dotyczą większości państw świata, ich różnych zbiorów informacji, np. Długość życia. 
+Plik z oryginałem danych jest pod nazwą “Life Expectancy Data”.
+
+[Link do strony z oryginalnymi danymi](https://www.kaggle.com/datasets/kumarajarshi/life-expectancy-who?resource=download)
+
+
+Po pierwsze chciałem skupić się na próbie 30 krajów. 
+Wybrałem zatem 30 krajów, metodą losową.
+Dane obliczyłem zarówno w excelu jak i w języku R. 
+Dane i obliczenia znajdują się w pliku “Projekt w R próba” oraz “Projekt w Excel próba”.
+
+Uznałem, że lepszym pomysłem będzie stworzenie modelu z większości krajów na jakich dano było mi pracować. 
+Zacząłem od pozostawienia tylko krajów z 2015 jako najbardziej aktualnych z danej bazy. 
+Dane są pod nazwą “Dane z 2015”. Następnie zamieniłem dane za pomocą funkcji “Tekst jako kolumny”. 
+Usunąłem kolumny “Year”, “Status”, ponieważ kolumny są mi niepotrzebne. 
+Usunąłem kolumny “Alcohol”, “percentage expenditure”, “Total expenditure”, ponieważ były zauważające braki danych. 
+Usunąłem kolumny “BMI”, “HIV/AIDS”, “thinness 1-19 years”, “thinness 5-9 years”, “Schooling”, ponieważ pojawiła mi się pewna anomalia. 
+Podczas zamiany na kolumny niektóre dane są formacie daty, po zamienieniu ich na liczby pojawiały się błędne liczby. 
+Również nie które liczby zamienione automatycznie są błędne. 
+Po wielu nieudanych próbach rozwiązania tego problemu, dokonałem eliminacji tych kolumn. 
+Również musiałem dokonać zamiany kropek na przecinki w liczbach oraz wypełnić puste pola średnią z reszty kolumny. 
+Dane znajdują się w pliku “Dane zrobione”. 
+Również stworzyłem osobny plik dla importowania do RStudio, pod nazwą “Dane do R”.
+
+### Szczegóły dotyczące danych:
+* Country - Kraj
+* Year - Rok
+* Status - Stan rozwinięty lub rozwijający się
+* Life expectancy - Oczekiwana długość życia w latach
+* Adult Mortality - Wskaźniki śmiertelności dorosłych obu płci (prawdopodobieństwo śmierci w wieku od 15 do 60 lat na 1000 mieszkańców)
+* Infant deaths - Liczba zgonów niemowląt na 1000 ludności
+* Alcohol - Spożycie alkoholu na mieszkańca (15+) (w litrach czystego alkoholu)
+* Hepatitis B - Zasięg szczepień przeciw wirusowemu zapaleniu wątroby typu B (HepB) wśród 1-latków (%)
+* Measles – Odra, liczba zgłoszonych przypadków na 1000 ludności
+* BMI - Średni wskaźnik masy ciała całej populacji
+* Under-five deaths - Liczba zgonów poniżej piątego roku życia na 1000 mieszkańców
+* Polio - Zasięg szczepień przeciw polio (Pol3) wśród 1-latków (%)
+* Total expenditure - Wydatki sektora instytucji rządowych i samorządowych na zdrowie jako odsetek wydatków sektora instytucji rządowych i samorządowych ogółem (%)
+* Diphtheria - Odsetek szczepień przeciwko anatoksynie błonicy i tężcowi oraz krztuścowi (DTP3) wśród 1-latków (%)
+* HIV/AIDS - Zgony na 1000 żywych urodzeń HIV/AIDS (0-4 lata)
+* GDP - Produkt Krajowy Brutto per capita (w USD)
+* Population - Ludność kraju
+* Thinness 1-19 years - Rozpowszechnienie szczupłości wśród dzieci i młodzieży w wieku od 10 do 19 lat (%)
+* Thinness 5-9 years - Występowanie szczupłości wśród dzieci w wieku od 5 do 9 lat (%)
+* Income - Wskaźnik rozwoju społecznego pod względem struktury dochodów zasobów (wskaźnik w zakresie od 0 do 1)
+* Schooling- Liczba lat nauki (lata)
+
+### Projekt w RStudio jest pod nazwą “Projekt R markdown”
+
+
+Zainstalowałem pakiet “readxl”, oraz uruchomiłem go przez funkcje “library”.
+```{r}
+library(readxl)
+```
+
+
+Zainstalowałem pakiet “rmarkdown”, oraz uruchomiłem go przez funkcje “library”.
+```{r}
+library(rmarkdown)
+```
+
+
+
+Kod wczytuje plik excel "Dane do R.xlsx" i zapisuje jego zawartość w zmiennej "Dane". Następnie
+wyświetla zawartość tej zmiennej za pomocą funkcji "View()", wyświetla nazwy kolumn danych za
+pomocą funkcji "names()", a na końcu wyświetla wartości kolumny "Life expectancy" za pomocą
+funkcji "print()".
+```{r}
+Dane <-  read_excel("C:/Users/Kacper/Desktop/Projekt Regression/Dane do R.xlsx")
+View(Dane)
+names(Dane)
+print(Dane$"Life expectancy" )
+```
+
+
+Tutaj za pomocą funkcji “colnames” dokonałem zmiany nazw kolumn w celu szybszej pracy w
+dalszych etapach.
+```{r}
+colnames(Dane)<-c("Life","Adult_M","Infant_D","H_B","Measles","Under_D","Polio","Dipht","GDP","Popl","Income")
+```
+
+
+Użyłem funkcji “plot” w celu zobaczeniu na wykresie dane z kolumny “Life”. Kolumna “Life” zostaje
+moją zmienną zależną, natomiast reszta kolumn zmiennymi niezależnymi.
+```{r}
+plot(Dane$"Life")
+```
+
+
+Sprawdziłem następujące wartości danych:
+* Minimalna wartość = 51.00
+* Pierwszy kwartal = 65.85
+* Mediana = 73.95
+* Średnia = 71.72
+* Trzeci kwartal = 76.97
+* Maksymalna wartość = 88.00
+, dla zmiennej zależnej.
+```{r}
+summary(Dane$"Life" )
+```
+
+
+W celu zobrazowania graficznego użyłem funkcji “hist”. Według tego można zauważyć dominacje wartości w przedziale od 70 do 80.
+```{r}
+hist(Dane$"Life" )
+```
+
+
+Za pomocą funkcji “cor” przedstawiłem korelacje wszystkich zmiennych. Im dana liczba jest większa
+tym większa jest korelacja między odpowiadającymi danymi w wierszu i kolumnie.
+Można z niej ustalić, że korelacja między zmienną zależną “Life” a zmienną:
+* “Adult_M” jest duża ujemnie
+* “Infant_D” jest bardzo mała ujemnie
+* “H_B” jest mała dodatnio
+* “Measles” jest bardzo mała ujemnie
+* “Under_D” jest bardzo mała ujemnie
+* “Polio” jest średnia dodatnio
+* “Dipht” jest średnia dodatnio
+* “GDP” jest mała dodatnio
+* “Popl” jest bardzo mała ujemnie
+* “Income” jest bardzo mała ujemnie
+```{r}
+cor(Dane)
+```
+
+
+Kod ten oblicza korelację między kolumnami w obiekcie "Dane", z wyjątkiem pierwszej kolumny,
+która jest pomijana za pomocą wyrażenia "[, -1]". Jest to kolumna “Life”. Funkcja "cor" oblicza
+korelację Pearsona, czyli stopień zależności liniowej między dwoma zmiennymi. Wynik jest następnie
+zaokrąglany do trzech miejsc po przecinku za pomocą funkcji "round".
+```{r}
+round(cor(Dane[,-1]),3)
+```
+
+
+Kod ten tworzy macierz z danych zawartych w obiekcie "Dane". Wiersze z obiektu "Dane" są
+wczytywane za pomocą wyrażenia "[, -1]", co oznacza, że pierwsza kolumna jest pomijana. Jest to
+kolumna “Life”. Następnie dane są konwertowane na macierz za pomocą funkcji "as.matrix".
+Ostatecznie macierz jest przypisywana do obiektu "matrix".
+```{r}
+matrix <- as.matrix(Dane[,-1])
+```
+
+
+Kod oblicza własne wartości i wektory dla macierzy "matrix". Macierz jest najpierw transponowana
+za pomocą funkcji "t", a następnie mnożona przez siebie za pomocą operatora "%*%", co daje
+macierz kowariancji. Otrzymaną macierz kowariancji jest analizowana przez funkcję "eigen", która
+oblicza własne wartości i wektory. Wynik jest przypisywany do obiektu "matrix_eigen". Dzięki temu
+mogę zobaczyć własne wartości macierzy
+```{r}
+matrix_eigen <- eigen(t(matrix) %*% matrix)
+matrix_eigen$val
+```
+
+
+Kod wylicza pierwiastek kwadratowy elementów ilorazu dwóch wektorów za pomocą “sqrt”, 
+“matrix_eigenval[1]” jest pierwszym elementem wektora “matrix_eigen$val”, a
+“matrix_eigen$val” jest całym wektorem. Dostając następujące wyniki. Wyniki powyżej 30
+wskazują na brak współliniowości.
+W moim przypadku można zauważyć, że współliniowość nie występuje. Na tym etapie można
+wykluczyć jako by mój model był dobrym modelem.
+```{r}
+sqrt(matrix_eigen$val[1]/matrix_eigen$val)
+```
+
+
+Sprawdziłem na wykresie jaka jest korelacje zmiennej zależnej i zmiennej “Adult_M” w postaci
+graficznej.
+Tutaj przetestowałem funkcje “lm” za pomocą stworzenia modelu prostej regresji liniowej z użyciem
+jednej zmiennej niezależnej. 
+Funkcja “abline” umożliwiła mi dodanie niebieskiej linii regresji, która najdokładniej próbuje
+dopasować się do istniejących danych. Można zauważyć, że linia jest przekrzywiona w dół po stronie
+lewej, wynika to z pojawiających się wartości odstających, poniżej wartości 100 dla zmiennej
+niezależnej.
+```{r}
+plot(Dane$"Life"~Dane$"Adult_M")
+SimpleModel<- lm(Dane$"Life"~Dane$"Adult_M")
+abline(SimpleModel$coef,col="blue")
+```
+
+
+Wynik p-value wyszedł bardzo dobry. Jednakże wartość R-squared zbyt
+mała.
+```{r}
+summary(SimpleModel)
+```
+
+
+Stworzenie pierwszego modelu. Używam metody “Backward” ręcznie. Eliminując zmienne o
+najwyższym wskaźniku p-value, tak długo aż model będzie zadawalający. Zakładam dla modelu, że
+poziom p-value poniżej 0.05 jest odpowiedni.
+
+Podsumowaniem modelu regresji liniowej wygląda następująco. Zawiera on informacje na temat
+tego, jak dobrze modelem można wyjaśnić zmienną zależną (Life), korzystając z 7 zmiennych
+objaśniających (Adult_M, Infant_D, H_B, Measles, Under_D, Polio, Dipht, GDP, Popl,
+Income).
+Sekcja "Residuals" pokazuje rozkład reszt modelu regresji liniowej, czyli różnic między wartościami
+faktycznymi a wartościami przewidywanymi. "Min", "1Q", "Median", "3Q", i "Max" to odpowiednio
+najmniejsza, pierwszy kwartyl, medianę, trzeci kwartyl, i największą wartość reszt.
+Sekcja "Coefficients" pokazuje wartości współczynników regresji dla każdej zmiennej objaśniającej,
+wraz z błędem standardowym i wartością statystyki t. Wartość p dla każdej zmiennej określa, czy jest
+ona istotna statystycznie (p < 0,05 oznacza, że zmienna jest istotna).
+Wartość "Residual standard error" to średni kwadrat błędu reszty. "Multiple R-squared" to
+współczynnik determinacji, który określa, jak dobrze modelem można wyjaśnić zmienną zależną.
+Wartość R-kwadratu zawsze znajduje się w zakresie od 0 do 1, a wartość bliska 1 oznacza dobre
+dopasowanie modelu. "Adjusted R-squared" to współczynnik determinacji uwzględniający liczbę
+zmiennych objaśniających. Wartość "F-statistic" i "p-value" służą do testowania hipotezy zerowej, że
+wszystkie współczynniki regresji są równe 0.
+```{r}
+Model <- lm(Life~Adult_M+Infant_D+H_B+Measles+Under_D+Polio+Dipht+GDP+Popl+Income,data=Dane)
+summary(Model)
+
+```
+
+
+W pierwszym modelu największy poziom p-value miała kolumna “Measles”. W drugim modelu już
+się nie pojawiła.
+```{r}
+Model2 <- lm(Life~Adult_M+Infant_D+H_B+Under_D+Polio+Dipht+GDP+Popl+Income,data=Dane)
+summary(Model2)
+```
+
+
+W drugim modelu największy poziom p-value miała kolumna “H_B”. W trzecim modelu już się nie
+pojawiła
+```{r}
+Model3 <- lm(Life~Adult_M+Infant_D+Under_D+Polio+Dipht+GDP+Popl+Income,data=Dane)
+summary(Model3)
+```
+
+
+W trzecim modelu największy poziom p-value miała kolumna “Income”. W czwartym modelu już się
+nie pojawiła.
+```{r}
+Model4 <- lm(Life~Adult_M+Infant_D+Under_D+Polio+Dipht+GDP+Popl,data=Dane)
+summary(Model4)
+```
+
+
+W czwartym modelu największy poziom p-value miała kolumna “Popl”. W piątym modelu już się nie
+pojawiła.
+```{r}
+Model5 <- lm(Life~Adult_M+Infant_D+Under_D+Polio+Dipht+GDP,data=Dane)
+summary(Model5)
+```
+
+
+W piątym modelu po usunięciu kolumny “Popl”, nastąpił duży wzrost wartości p-value dla kolumny
+“Under_D” oraz “Polio”. Jest efekt niepożądany dla mojego modelu, dlatego wybranym modelem
+zostaje model czwarty. Pomimo wartości p-value dla kolumny “Popl” w okolicy 0.08. Również
+poziom R-squared wynosi 0.7229, możemy interpretować to jako dobry model, choć na granicy złego
+(zmienność oczekiwanej długości życia jest wyjaśniony w 72% przez model). 
+Dodatkowo Adjusted Rsquared jest na poziomie 0.7118, jest to najlepszy wynik ze wszystkich pięciu policzonych.
+```{r}
+Model <- lm(Life~Adult_M+Infant_D+Under_D+Polio+Dipht+GDP+Popl,data=Dane)
+summary(Model)
+```
+
+
+W celu potwierdzenia wybrania dobrego modelu, użyłem funkcji “step” za równo direction
+“backward” jak i “both”. Obie funkcje dały mi wynik identyczny dla mojego. Kod tworzy nowy model
+regresji liniowej "Model_nowy_backward" przy użyciu procedury backward selection. Procedura ta
+polega na usuwaniu najmniej istotnych zmiennych objaśniających, aż pozostaną tylko te, które są
+istotne statystycznie. Na początku tworzony jest pełny model regresji liniowej. Następnie jest on
+przekształcany za pomocą funkcji "step" z argumentem "direction = 'backward'". W końcowym kroku
+wyświetlane jest podsumowanie modelu "Model_nowy_backward", a następnie "Model_nowy" jest
+ustawiany na "Model_nowy_backward" i wyświetlany jest ponownie podsumowanie modelu.
+```{r}
+Model_backward<-step(lm(Life~Adult_M+Infant_D+H_B+Measles+Under_D+Polio+Dipht+GDP+Popl+Income,data=Dane),direction="backward")
+summary(Model_backward)
+```
+
+```{r}
+Model_both<-step(lm(Life~Adult_M+Infant_D+H_B+Measles+Under_D+Polio+Dipht+GDP+Popl+Income,data=Dane),direction="both")
+summary(Model_both) 
+```
+
+
+Kodu przedstawia analizę reszt statystycznych (residuals) na podstawie oszacowania opartego na
+estymatorach.
+* "RS <- rstudent(Model)" - definiuje nową zmienną "RS" jako wartości R-student reszt modelu.
+* "plot(RS, ylab="R-Student residual", main="R-Student residual")" - tworzy wykres R-Student reszt.
+* "RS[abs(RS)==max(abs(RS))]" - znajduje największą wartość absolutną w zmiennej "RS".
+* "dim(Dane)" - zwraca wymiary macierzy "Dane".
+* "dim(Dane)[1]" - zwraca liczbę wierszy macierzy "Dane".
+* "0.05/dim(Dane)[1]*2" - oblicza prawdopodobieństwo dwustronnego testu.
+* "dim(Dane)[1]-4-1" - oblicza stopień swobody.
+* "qt(0.05/(dim(Dane)[1]*2),(dim(Dane)[1]-4-1))" - oblicza kwantyl dla dwustronnego testu.
+* "(-abs(RS[abs(RS)==max(abs(RS))])<qt(0.05/(dim(Dane)[1]*2),(dim(Dane)[1]-4-1)))" - sprawdza, czy
+największa wartość absolutna w "RS" jest mniejsza niż kwantyl dwustronnego testu.
+
+Wynik jest “TRUE”, czyli największa wartość absolutna w "RS" jest mniejsza niż kwantyl
+dwustronnego testu.
+```{r}
+(RS <- rstudent(Model))
+```
+
+
+Przedstawienie na wykresie 
+```{r}
+plot(RS,ylab="R-Student residual",main="R-Student residual")
+```
+
+
+Uzyskanie wartości odstających.
+```{r}
+RS[abs(RS)==max(abs(RS))]
+```
+
+```{r}
+dim(Dane)
+dim(Dane)[1]
+0.05/dim(Dane)[1]*2
+dim(Dane)[1]-4-1
+qt(0.05/(dim(Dane)[1]*2),(dim(Dane)[1]-4-1))
+```
+
+```{r}
+(-abs(RS[abs(RS)==max(abs(RS))])<qt(0.05/(dim(Dane)[1]*2),(dim(Dane)[1]-4-1)))
+```
+
+
+Dzięki odległości cooka, mogę usunąć wartości odstające i stworzyć nowy model o nazwie
+“Model_no_outliers”. Kod wykorzystuje funkcję cooks.distance do obliczenia odległości Cooka
+dla każdego punktu danych. Odległość Cooka jest miarą, jak bardzo punkt danych wpływa na wynik
+modelu regresji liniowej. Wartość odległości Cooka jest wyznaczana jako iloczyn między zmienną
+zależną (Life) i skorygowaną estymatą modelu bez tego punktu danych. Wartości odległości Cooka
+powyżej 1 są uważane za "outliers", tj. punkty danych, które mają nieproporcjonalnie duży wpływ na
+wynik modelu. Następnie wykonywane jest wykreślenie wartości odległości Cooka, a następnie
+tworze nowy model regresji liniowej bez punktów danych, które są outliers. W rezultacie, wynik
+końcowy jest wynikiem modelu regresji liniowej bez wartości odstających.
+```{r}
+(cooks_dis <- cooks.distance(Model))
+```
+
+
+Tworzenie wykresu
+```{r}
+plot(cooks_dis,ylab="Cooks distances")
+```
+
+
+“Model_no_outliers” ma lepsze wyniki niż Model. 
+```{r}
+Model_no_outliers <-lm(Life~Adult_M+Infant_D+Under_D+Polio+Dipht+GDP+Popl,data=Dane,subset=(cooks_dis<max(cooks_dis)))
+summary(Model_no_outliers)
+```
+
+
+Kod tworzy wykres diagnostycznych reszt dla modelu statystycznego.
+* "par(mfrow=c(2,1))" - ustawia parametr okna, aby rysować dwa wykresy na jednej stronie.
+* "plot(Model$res, ylab="Residuals", main="Index plot of residuals")" - tworzy wykres indexu reszt dla modelu "Model".
+* "abline(h=0, col="red")" - dodaje linie na wykresie, reprezentującą wartość 0, w kolorze czerwonym.
+* "plot(Model$fit, Model$res, xlab="Fitted", ylab="Residuals")" - tworzy wykres reszt, gdzie na osi x jest "Fitted", a na osi y jest "Residuals".
+* "abline(h=0, col="red")" - dodaje linie na wykresie, reprezentującą wartość 0, w kolorze czerwonym.
+* "plot(Model_no_outliers$res, ylab="Residuals", main="Index plot of residuals")" - tworzy wykres indexu reszt dla modelu "Model_no_outliers".
+* "abline(h=0, col="red")" - dodaje linie na wykresie, reprezentującą wartość 0, w kolorze czerwonym.
+* "plot(Model_no_outliers$fit, Model_no_outliers$res, xlab="Fitted", ylab="Residuals")" - tworzy wykres skojarzony reszt, gdzie na osi x jest "Fitted", a na osi y jest "Residuals", dla modelu "Model_no_outliers".
+* "abline(h=0, col="red")" - dodaje linie na wykresie, reprezentującą wartość 0, w kolorze czerwonym
+```{r}
+par(mfrow=c(2,1))
+plot(Model$res,ylab="Residuals",main="Index plot of residuals")
+abline(h=0,col="red")
+plot(Model$fit,Model$res,xlab="Fitted",ylab="Residuals")
+abline(h=0,col="red")
+```
+
+
+```{r}
+par(mfrow=c(2,1))
+plot(Model_no_outliers$res,ylab="Residuals",main="Index plot of residuals")
+abline(h=0,col="red")
+plot(Model_no_outliers$fit,Model_no_outliers$res,xlab="Fitted",ylab="Residuals")
+abline(h=0,col="red")
+```
+
+
+Test rozkładu normalnego zacząłem od graficznego przedstawienia wszystkich zmiennych w modelu.
+Za pomocą funkcji “boxplot” oraz “qqnorm”.
+Kod przedstawia.
+* "boxplot(Dane$Life)" - rysuje wykres typu boxplot, który pokazuje statystyki centralne i rozrzut danych dla zmiennej "Life".
+* "qqnorm(Dane$"Life" )" - rysuje wykres typu Q-Q plot, który pokazuje, jak bardzo dane odpowiadają rozkładowi normalnemu.
+* "qqline(Dane$"Life" )" - dodaje linię do wykresu typu Q-Q plot, która pokazuje, jak dane powinny odpowiadać rozkładowi normalnemu.
+
+Jeśli dane są zgodne z rozkładem normalnym, to na wykresie typu Q-Q plot powinny być one
+rozłożone wokół linii. Jeśli nie są, oznacza to, że dane nie odpowiadają rozkładowi normalnemu.
+Wykres pudełkowy składa się z osi. Nad osią umieszczony jest prostokąt (pudełko), którego lewy bok
+jest wyznaczony przez pierwszy kwartyl, zaś prawy bok przez trzeci kwartyl. Szerokość pudełka
+odpowiada wartości rozstępu ćwiartkowego. Wewnątrz prostokąta znajduje się pionowa linia,
+określająca wartość mediany.
+W pierwszym przykładzie można zauważyć, że dane z kolumny “Life” całkiem dobrze wypadają na
+rozkładzie normalnym.
+```{r}
+boxplot(Dane$Life)
+```
+
+
+```{r}
+qqnorm(Dane$"Life" )
+qqline(Dane$"Life" )
+```
+
+
+```{r}
+boxplot(Dane$Adult_M)
+```
+
+
+```{r}
+qqnorm(Dane$"Adult_M" )
+qqline(Dane$"Adult_M" )
+```
+
+
+```{r}
+boxplot(Dane$Infant_D)
+```
+
+
+```{r}
+qqnorm(Dane$"Infant_D")
+qqline(Dane$"Infant_D")
+```
+
+
+```{r}
+boxplot(Dane$Under_D)
+```
+
+
+```{r}
+qqnorm(Dane$"Under_D")
+qqline(Dane$"Under_D")
+```
+
+
+```{r}
+boxplot(Dane$Polio)
+```
+
+
+```{r}
+qqnorm(Dane$"Polio")
+qqline(Dane$"Polio")
+```
+
+```{r}
+boxplot(Dane$Dipht)
+```
+
+
+```{r}
+qqnorm(Dane$"Dipht")
+qqline(Dane$"Dipht")
+```
+
+
+```{r}
+boxplot(Dane$GDP)
+```
+
+
+```{r}
+qqnorm(Dane$"GDP")
+qqline(Dane$"GDP")
+```
+
+
+```{r}
+boxplot(Dane$Popl)
+```
+
+
+```{r}
+qqnorm(Dane$"Popl")
+qqline(Dane$"Popl") 
+```
+
+
+Również przedstawiłem graficznie to samo za pomocą pakietu “ggpubr”, oraz funkcji “ggqqplot”.
+Wykres Q-Q jest rysowany między daną próbą a rozkładem normalnym. Wykreślana jest również 45-
+stopniowa linia odniesienia, aby ocenić, jak bliskie są wartości próbki rozkładowi normalnemu.
+```{r}
+library("ggpubr")
+```
+
+```{r}
+ggqqplot(Dane$Life, ylab = "Life")
+```
+
+
+```{r}
+ggqqplot(Dane$Adult_M, ylab = "Adult_M")
+```
+
+
+```{r}
+ggqqplot(Dane$Infant_D, ylab = "Infant_D")
+```
+
+
+```{r}
+ggqqplot(Dane$Under_D, ylab = "Under_D")
+```
+
+
+```{r}
+ggqqplot(Dane$Polio, ylab = "Polio")
+```
+
+
+```{r}
+ggqqplot(Dane$Dipht, ylab = "Dipht")
+```
+
+
+```{r}
+ggqqplot(Dane$GDP, ylab = "GDP")
+```
+
+
+```{r}
+ggqqplot(Dane$Popl, ylab = "Popl")
+```
+
+
+Przedstawienie na wykresie rozkładu normlanego modeli “Model” oraz “Model_no_outliers”.
+Kod pokazuje wizualizację danych i sprawdza, czy reszty regresji są zgodne z rozkładem normalnym.
+* "par(mfrow=c(1,1))" - oznacza, że na każdej stronie wyników będzie tylko jeden wykres.
+* "qqnorm(Model$res,ylab="Residuals")" - rysuje wykres typu Q-Q plot dla reszt regresji Model, z opisem osi y jako "Residuals".
+* "qqline(Model$res, col="blue")" - dodaje linię do wykresu typu Q-Q plot, która pokazuje, jak dane powinny odpowiadać rozkładowi normalnemu. Kolor linii to niebieski.
+```{r}
+par(mfrow=c(1,1))
+qqnorm(Model$res,ylab="Residuals")
+qqline(Model$res, col="blue")
+```
+
+
+Przedstawienie na wykresie rozkładu normlanego modeli “Model” oraz “Model_no_outliers” z
+użyciem funkcji “rstudent”.
+* "qqnorm(Model_no_outliers$res,ylab="Residuals")" - rysuje wykres typu Q-Q plot dla reszt regresji Model_no_outliers, z opisem osi y jako "Residuals".
+* "qqline(Model_no_outliers$res, col="blue")" - dodaje linię do wykresu typu Q-Q plot, która pokazuje, jak dane powinny odpowiadać rozkładowi normalnemu. Kolor linii to niebieski.
+* "qqnorm(rstudent(Model),ylab="Studentized residuals")" - rysuje wykres typu Q-Q plot dla studentyzowanych reszt regresji Model, z opisem osi y jako "Studentized residuals".
+* "abline(0,1)" - dodaje prostą do wykresu typu Q-Q plot, która pokazuje, jak dane powinny odpowiadać rozkładowi normalnemu.
+* "qqnorm(rstudent(Model_no_outliers),ylab="Studentized residuals")" - rysuje wykres typu Q-Q plot dla studentyzowanych reszt regresji Model_no_outliers, z opisem osi y jako "Studentized residuals".
+* "abline(0,1)" - dodaje prostą do wykresu typu Q-Q plot, która pokazuje, jak dane powinny odpowiadać rozkładowi normalnemu.
+```{r}
+par(mfrow=c(1,1))
+qqnorm(Model_no_outliers$res,ylab="Residuals")
+qqline(Model_no_outliers$res, col="blue")
+```
+
+
+```{r}
+qqnorm(rstudent(Model),ylab="Studentized residuals")
+abline(0,1)
+```
+
+
+```{r}
+qqnorm(rstudent(Model_no_outliers),ylab="Studentized residuals")
+abline(0,1)
+```
+
+
+W celu sprawdzenia rozkładu normlanego użyje testu Shapiro-Wilka.
+P-value w teście Shapiro-Wilka jest miarą siły dowodu przeciwko hipotezie, że dane pochodzą z
+rozkładu normalnego. Im mniejsze p-value, tym mocniejszy jest dowód przeciwko hipotezie
+normalności.
+Jeśli p-value jest mniejsze niż poziom istotności (np. 0,05), to odrzucamy hipotezę normalności i
+stwierdzamy, że dane nie pochodzą z rozkładu normalnego. W przeciwnym razie przyjmujemy
+hipotezę normalności.
+Za pomocą “shapiro.test” mogłem uzyskać następująće wyniki
+* Dla modelu “Model” wynik wyszedł W = 0.97386, p-value = 0.001701. Poniżej 0,05 p-value
+rozkład nie jest normalny.
+* Dla modelu “Model2” wynik wyszedł W = 0.97416, p-value = 0.001852. Poniżej 0,05 p-value
+rozkład nie jest normalny.
+* Dla modelu “Model3” wynik wyszedł W = 0.97468, p-value = 0.002148. Poniżej 0,05 p-value
+rozkład nie jest normalny.
+* Dla modelu “Model4” wynik wyszedł W = 0.97386, p-value = 0.001701. Poniżej 0,05 p-value
+rozkład nie jest normalny.
+* Dla modelu “Model5” wynik wyszedł W = 0.97026, p-value = 0.0006324. Poniżej 0,05 p-value
+rozkład nie jest normalny.
+* Dla modelu “Model_no_outlires” wynik wyszedł W = 0.97233, p-value = 0.001155. Poniżej
+0,05 p-value rozkład nie jest normalny.
+Wszystkie modele uzyskały wynik p-value poniżej 0,05, co czynni je niepochodzących z rozkładu
+normlanego. Jednocześnie wyniki są bardzo zbliżone. Nie zmieniam modelu, a modelem jest model
+“Model4”.
+```{r}
+shapiro.test(Model$res)
+```
+
+```{r}
+shapiro.test(Model2$res)
+```
+
+```{r}
+shapiro.test(Model3$res)
+```
+
+
+```{r}
+shapiro.test(Model4$res)
+```
+
+
+```{r}
+shapiro.test(Model5$res)
+```
+
+
+```{r}
+shapiro.test(Model_no_outliers$res)
+```
+
+
+Test niezależności
+Kod ładuje bibliotekę "randtests" i wywołuje funkcję "runs.test" na zmiennej "Model$res" oraz
+Model_no_outliers$res". Funkcja "runs.test" jest jednym z testów dla oceny losowości w sekwencji
+wartości. Test jest wykonywany na “residulas” z modelu statystycznego.
+Wynik testu przedstawia czy wartości "residuals” są losowe, czy są skorelowane.
+Jeśli wartości danych byłyby losowe, można oczekiwać, że liczba ciągów wzrostów i spadków
+wartości byłaby podobna. Jeśli natomiast wartości danych byłyby skorelowane, można oczekiwać, że
+będzie więcej ciągów wzrostów niż spadków, lub na odwrót.
+W obu przypadkach moje model są powyżej 0.05 p-value, oznacza to, że nie odrzucaja hipotezę
+zerową i wartości są losowe.
+```{r}
+library(randtests)
+```
+
+```{r}
+runs.test(Model$res)
+```
+
+```{r}
+runs.test(Model_no_outliers$res)
+```
+
+
+Kod oznacza wykonanie analiz regresji dla zmiennych wyjaśniających w zbiorze danych Dane.
+W pierwszej linijce tworzy się macierz explanatory z wykluczeniem pierwszej kolumny Dane.
+Następnie tworzy się model regresji dla pierwszej kolumny explanatory jako zmiennej zależnej i
+pozostałych kolumn explanatory jako zmiennych niezależnych. Podsumowanie modelu jest
+wyświetlane za pomocą funkcji summary().
+Wartość współczynnika determinacji dla tego modelu jest pobierana z jego podsumowania.
+```{r}
+explanatory<-as.matrix(Dane[,-1])
+```
+
+```{r}
+summary(lm(explanatory[,1]~explanatory[,-1]))
+```
+
+```{r}
+summary(lm(explanatory[,1]~explanatory[,-1]))$r.squared
+```
+
+
+W tej części kodu zaimportowana jest biblioteka “car” i wykonane jest obliczenie Variance Inflation
+Factor (VIF) dla modelu “Model” automatycznie. VIF jest miarą multicollinearity (wzajemnej
+korelacji) pomiędzy zmiennymi niezależnymi w modelu regresji. Wartość VIF powyżej 10 sugeruje
+występowanie wzajemnej korelacji i konieczność usunięcia jednej z kolumn explanatory. W moim
+modelu takimi wartościami są “Infant_D” oraz “Under_D”.
+```{r}
+library(car)
+vif(Model)
+```
+
+
+Za pomocą “Model”, mogłem dostać współczynniki dla wszystkich zmiennych.
+```{r}
+Model$coefficients
+```
+
+
+Przykładowa interpretacja współczynnika dla “Adult_M”:
+Jeśli zwiększymy oczekiwane prawdopodobieństwo śmierci między 15 a 60 rokiem życia na 1000
+mieszkańców o rok, to oczekiwana długość życia w kraju zmniejszy się o 4,73 lata, przy założeniu
+niezmienionych wartości pozostałych zmiennych objaśniających tzn. zgodnie z zasadą ceteris
+Paribus.
+Stworzyłem nowe zmienne do których przypisałem współczynniki. Dostając bety z odpowiadającymi
+współczynnikami.
+```{r}
+beta_0<-Model$coefficients['(Intercept)']
+beta_0
+```
+
+```{r}
+beta_adultm<-Model$coefficients['Adult_M']
+beta_adultm
+```
+
+```{r}
+beta_infantd<-Model$coefficients['Infant_D']
+beta_infantd
+```
+
+```{r}
+beta_underd<-Model$coefficients['Under_D']
+beta_underd
+```
+
+```{r}
+beta_polio<-Model$coefficients['Polio']
+beta_polio
+```
+
+```{r}
+beta_dipht<-Model$coefficients['Dipht']
+beta_dipht
+```
+```{r}
+beta_gdp<-Model$coefficients['GDP']
+beta_gdp
+```
+
+
+```{r}
+beta_popl<-Model$coefficients['Popl']
+beta_popl
+
+```
+
+
+Dzięki stworzeniu bet, mogę dokonać predykcji. Stworzyłem 3 różne predykcje z różnymi liczbami.
+Przykładowo w “forecast” zakładając, że:
+* “Adult Mortality” jest na poziomie 100
+* “Infant deaths” jest na poziomie 56
+* “Under-five deaths” jest na poziomie 80
+* “Polio” jest na poziomie 70
+* “Diphtheria” jest na poziomie 80
+* “GDP” jest na poziomie 300
+* “Population” jest na poziomie 10000000
+Wynik oczekiwanej długości życia według modelu wynosi 71.54948.
+```{r}
+(forecast<-beta_0+beta_adultm*100+beta_infantd*56+beta_underd*80+beta_polio*70+beta_dipht*80+beta_gdp*300+beta_popl*10000000)
+```
+
+```{r}
+(forecast2<-beta_0+beta_adultm*500+beta_infantd*86+beta_underd*90+beta_polio*73+beta_dipht*94+beta_gdp*456+beta_popl*9080000)
+```
+
+```{r}
+(forecast3<-beta_0+beta_adultm*60+beta_infantd*47+beta_underd*52+beta_polio*64+beta_dipht*45+beta_gdp*291+beta_popl*13768000)
+```
+
+
+W już końcowym etapie projektu dostrzegłem możliwość innego wprowadzenia danych. Użyłem
+sposobu zmiany danych w RStudio. Musiałem użyć nowego pakietu “tidyverse”, aby odczytało moje
+dane w formacie “csv”. Tak dostałem dane z prawidłowym odczytem kolumn, które w excelu nie
+działały, dzięki temu dostałem dostęp do danych, które bardzo mnie ciekawiły i chciałem użyć
+wcześniej. Postanowiłem nie usuwać poprzedniej pracy w celu sprawozdania pracy i dostania
+możliwych ciekawych wyników.
+Instalacja pakietu i uruchomienie go, aby użyć funkcji “read_csv"
+```{r}
+library(tidyverse)
+```
+
+Stworzenie nowego wektora z nową bazą danych, o nazwie “Dane_nowe”
+```{r}
+Dane_nowe <-  read_csv("C:/Users/Kacper/Desktop/Projekt Regression/Dane z 2015.csv")
+View(Dane_nowe)
+names(Dane_nowe)
+```
+
+
+Działania kodu:
+Ładuje bibliotekę "dplyr", która zapewnia zestaw narzędzi do pracy z ramkami danych w R.
+Używa biblioteki "dplyr" do modyfikowania ramki danych "Dane_nowe". Funkcja "select" jest
+używana do wybierania kolumn z ramki danych, a argument "-c(Country, Year, Status, Alcohol,
+percentage expenditure, Total expenditure)" jest używany, aby wykluczyć określone
+kolumny z ramki danych. Rezultat jest przypisywany z powrotem do "Dane_nowe" za pomocą
+operatora rury "%>%".
+Wywołuje funkcję "View", aby wyświetlić zawartość zmodyfikowanej ramki danych "Dane_nowe" w
+formacie tabeli.
+Wywołuje funkcję "names", aby wyświetlić nazwy kolumn w zmodyfikowanej ramce danych
+"Dane_nowe".
+```{r}
+library("dplyr")
+Dane_nowe <- Dane_nowe %>% select(-c(Country, Year, Status, Alcohol, `percentage expenditure`, `Total expenditure`))
+View(Dane_nowe)
+names(Dane_nowe)
+```
+
+
+Przydzielanie nowych nazw kolumną.
+```{r}
+colnames(Dane_nowe)<-c("Life","Adult_M","Infant_D","H_B","Measles","BMI", "Under_D","Polio","Dipht","H/A", "GDP","Popl", "t_1-19", "t_5-9", "Income", "Schooling")
+```
+
+
+Działania kodu:
+Tworzy nową kolumnę w ramce danych "Dane_nowe" o nazwie "H_B".
+Używa funkcji "ifelse" do wypełnienia brakujących wartości (reprezentowanych przez "NA") w
+kolumnie "H_B".
+Jeśli wartość w danej komórce kolumny "H_B" jest "NA", oblicza się średnią wszystkich niebrakujących wartości w kolumnie "H_B" za pomocą funkcji "mean" z argumentem "na.rm = TRUE",
+który usuwa brakujące wartości z obliczeń.
+Jeśli wartość w danej komórce kolumny "H_B" nie jest "NA", wartość pozostaje niezmieniona.
+Rezultat jest przypisywany z powrotem do kolumny "Dane_nowe$H_B".
+```{r}
+Dane_nowe$H_B = ifelse(is.na(Dane_nowe$H_B),
+                       ave(Dane_nowe$H_B, FUN = function(x) mean(x, na.rm = TRUE)),
+                       Dane_nowe$H_B)
+```
+
+Działania te są wykonywane na reszcie kolumn z brakującymi danymi.
+```{r}
+Dane_nowe$BMI = ifelse(is.na(Dane_nowe$BMI ),
+                       ave(Dane_nowe$BMI , FUN = function(x) mean(x, na.rm = TRUE)),
+                       Dane_nowe$BMI )
+Dane_nowe$GDP = ifelse(is.na(Dane_nowe$GDP ),
+                       ave(Dane_nowe$GDP  , FUN = function(x) mean(x, na.rm = TRUE)),
+                       Dane_nowe$GDP  )
+Dane_nowe$Popl = ifelse(is.na(Dane_nowe$Popl  ),
+                       ave(Dane_nowe$Popl   , FUN = function(x) mean(x, na.rm = TRUE)),
+                       Dane_nowe$Popl   )
+Dane_nowe$`t_1-19`  = ifelse(is.na(Dane_nowe$`t_1-19`   ),
+                        ave(Dane_nowe$`t_1-19`   , FUN = function(x) mean(x, na.rm = TRUE)),
+                        Dane_nowe$`t_1-19`   )
+Dane_nowe$`t_5-9` = ifelse(is.na(Dane_nowe$`t_5-9`   ),
+                        ave(Dane_nowe$`t_5-9`    , FUN = function(x) mean(x, na.rm = TRUE)),
+                        Dane_nowe$`t_5-9`    )
+Dane_nowe$Income = ifelse(is.na(Dane_nowe$Income    ),
+                           ave(Dane_nowe$Income    , FUN = function(x) mean(x, na.rm = TRUE)),
+                           Dane_nowe$Income    )
+Dane_nowe$Schooling = ifelse(is.na(Dane_nowe$Schooling   ),
+                          ave(Dane_nowe$Schooling    , FUN = function(x) mean(x, na.rm = TRUE)),
+                          Dane_nowe$Schooling    )
+```
+
+
+Sprawdzanie współliniowości.
+Działanie kodu:
+Ten kod tworzy nową macierz "matrix_nowy" z danymi "Dane_nowe" bez pierwszej kolumny.
+Następnie oblicza macierz wartości własnych "matrix_eigen_nowy" jako iloczyn transponowanej
+macierzy "matrix_nowy" i "matrix_nowy". W końcowym kroku wartości pierwszej wartości własnej
+dzielone są przez wszystkie wartości własne, a następnie wynik jest pierwiastkowany.
+Wyniki powyżej 30 pokazują brak współliniowości.
+```{r}
+matrix_nowy <- as.matrix(Dane_nowe[,-1])
+
+matrix_eigen_nowy <- eigen(t(matrix_nowy) %*% matrix_nowy)
+matrix_eigen_nowy$val
+
+sqrt(matrix_eigen_nowy$val[1]/matrix_eigen_nowy$val)
+```
+
+
+Kod tworzy nowy model regresji liniowej "Model_nowy" z zmienną objaśnianą "Life" i kilkoma
+zmiennymi objaśniającymi: "Adult_M", "Infant_D", "H_B", "Measles", "BMI", "Under_D", "Polio",
+"Dipht", "H/A", "GDP", "Popl", "t_1-19", "t_5-9", "Income", "Schooling". Dane są wczytywane z data
+frame'u "Dane_nowe". W końcowym kroku jest wyświetlany podsumowanie modelu regresji
+liniowej "Model_nowy".
+```{r}
+Model_nowy <- lm(Life~Adult_M+Infant_D+H_B+Measles+BMI+Under_D+Polio+Dipht+`H/A`+GDP+Popl+`t_1-19`+`t_5-9`+Income+Schooling,data=Dane_nowe)
+summary(Model_nowy)
+```
+
+Użycie metody “backward”, aby ustalić najlepszy model.
+```{r}
+Model_nowy_backward<-step(lm(Life~Adult_M+Infant_D+H_B+Measles+BMI+Under_D+Polio+Dipht+`H/A`+GDP+Popl+`t_1-19`+`t_5-9`+Income+Schooling,data=Dane_nowe),direction="backward")
+summary(Model_nowy_backward)
+```
+
+
+Finalny wynik jest bardzo optymistyczny, ponieważ wynik R-squared wynosi 0.8726 (zmienność
+oczekiwanej długości życia jest wyjaśniony w 87% przez model), a “Adjusted R-squared" wynosi
+0.8675.
+```{r}
+Model_nowy <- Model_nowy_backward
+summary(Model_nowy)
+```
+
+
+Sprawdzenie outlierów oraz stworzenie nowego modelu z usunietymi wartościami odstającymi.
+```{r}
+cooks_dis <- cooks.distance(Model_nowy)
+plot(cooks_dis,ylab="Cooks distances")
+Model_nowy_no_outliers <-lm(Life~Adult_M+Infant_D+H_B+Under_D+`H/A`+`t_1-19`+Income,data=Dane_nowe,subset=(cooks_dis<max(cooks_dis)))
+```
+
+```{r}
+summary(Model_nowy_no_outliers)
+```
+
+
+```{r}
+summary(Model_nowy)
+```
+
+
+Sprawdzenie czy rozkład jest normalny za pomocą Testu Shapiro. W przypadku “Model_nowy”
+model nie ma rozkładu normalnego. Natomiast w modelu “Model_nowy_no_outliers” p-value
+wynosi ponad 0.05, oznacza to, że istnieje rozkład normalny.
+```{r}
+shapiro.test(Model_nowy$res)
+```
+
+```{r}
+shapiro.test(Model_nowy_no_outliers$res)
+```
+
+Na końcu porównałem moje wszystkie modele
+
+“Model_nowy” ma lepszy “R-squared” niż “Model” - 0.72 < 0.87.
+“Model_nowy” ma lepszy “Adjusted R-squared” niż “Model” - 0.71 < 0.86.
+“Model_nowy” ma lepsze zmienne o wartości “p-value” mniejszych niż 0.05, niż “Model”:
+* “Model” trzy wartości z przedziału 0 – 0,001
+* “Model_nowy” cztery wartości z przedziału 0 – 0,001
+* “Model” trzy wartości z przedziału 0,001 – 0,01
+* “Model_nowy” trzy wartości z przedziału 0,001 – 0,01
+* “Model” jedną wartość z przedziału 0,01 – 0,05
+* “Model_nowy” jedną wartość z przedziału 0,01 – 0,05
+* “Model” jedną wartość z przedziału 0,05 – 0,1
+* “Model_nowy” zero wartości z przedziału 0,05 – 0,1
+```{r}
+summary(Model)
+```
+
+```{r}
+summary(Model_nowy)
+```
+
+
+“Model_nowy_no_outliers” ma lepszy “R-squared” niż “Model_no_outliers” - 0.73 < 0.87.
+“Model_nowy_no_outliers” ma lepszy “Adjusted R-squared” niż “Model_no_outliers” - 0.72 < 0.87.
+“Model_nowy_no_outliers” ma lepsze zmienne o wartości “p-value” mniejszych niż 0.05, niż
+“Model_no_outliers”:
+* “Model_no_outliers” pięć wartości z przedziału 0 – 0,001
+* “Model_nowy_no_outliers” sześć wartości z przedziału 0 – 0,001
+* “Model_no_outliers” jedną wartość z przedziału 0,001 – 0,01
+* “Model_nowy_no_outliers” jedną wartość z przedziału 0,001 – 0,01
+* “Model_no_outliers” jedną wartość z przedziału 0,01 – 0,05
+* “Model_nowy_no_outliers” jedną wartość z przedziału 0,01 – 0,05
+* “Model_no_outliers” zero wartości z przedziału 0,05 – 0,1
+* “Model_nowy_no_outliers” zero wartości z przedziału 0,05 – 0,1
+* “Model_no_outliers” ma jedną wartość z przedziału 0,1 – 1
+```{r}
+summary(Model_no_outliers)
+```
+
+```{r}
+summary(Model_nowy_no_outliers)
+```
+
+
+W tym etapie z ciekawości użyłem metody “Machine Learning”, aby zobaczyć jakie wyniki mogę
+uzyskać działając na moich danych. Dokonałem podziału danych na część “test”, którą będę testować
+na podstawie części “training”. Podział jest 80% dla “training” i 20% dla “test” z całości danych.
+Zainstalowałem pakiet “caTools”, oraz go uruchomiłem za pomocą funkcji “library”. Następnie
+uruchomienie funkcji “set.seed”, która odpowiada za generowanie losowych liczb. Funkcja
+“sample.split”, która podzieliła moją bazą danych według ustalonego wcześniejszego podziału.
+Kod przedstawia:
+* Pierwsza linia - ładowanie biblioteki caTools
+* Druga linia - ustawianie seeda losowego na wartość 123
+* Trzecia linia - dzielenie danych na zbiór treningowy i testowy z proporcją 80/20
+* Czwarta linia - tworzenie zbioru treningowego na podstawie danych i dzielenia
+* Piąta linia - tworzenie zbioru testowego na podstawie danych i dzielenia
+```{r}
+library(caTools)
+set.seed(123)
+split = sample.split(Dane$Life, SplitRatio = 0.8)
+training_set = subset(Dane, split == TRUE)
+test_set = subset(Dane, split == FALSE)
+```
+
+
+Stworzenie modelu składającego z bazy danych “training_set”.
+Kod przedstawia:
+* Pierwsza linia - tworzenie modelu regresji liniowej na zbiorze treningowym, gdzie zmienna objaśniana jest Life a pozostałe zmienne są uwzględniane jako zmienne objaśniające
+* Druga linia - wyświetlenie podsumowania modelu
+```{r}
+regressor = lm(formula = Life ~ .,
+               data = training_set)
+
+summary(regressor)
+```
+
+
+Stworzyłem przewidziane y, dla “regressor”
+Kod przedstawia:
+* Pierwsza linia - prognozowanie wartości Life na zbiorze testowym
+* Druga linia - wyświetlenie prognozowanych wartości
+```{r}
+y_pred = predict(regressor, newdata = test_set)
+y_pred
+```
+
+
+Stworzenie “training_set_nowy” i “test_set_nowy” na podstawie “Dane_nowe”, według tych
+samych zasad.
+```{r}
+split_nowy = sample.split(Dane_nowe$Life, SplitRatio = 0.8)
+training_set_nowy = subset(Dane_nowe, split == TRUE)
+test_set_nowy = subset(Dane_nowe, split == FALSE)
+```
+
+
+Stworzenie modelu regresji liniowej “regressor_nowy” na zbiorze treningowym
+“training_set_nowy”, gdzie zmienna objaśniana jest Life a pozostałe zmienne są uwzględniane jako
+zmienne objaśniające
+```{r}
+regressor_nowy = lm(formula = Life ~ .,
+               data = training_set_nowy)
+```
+
+
+Porównałem dwa modele.
+“regressor_nowy” ma lepszy “R-squared” niż “regressor” - 0.71 < 0.87.
+“regressor_nowy” ma lepszy “Adjusted R-squared” niż “regressor” - 0.69 < 0.86.
+```{r}
+summary(regressor_nowy)
+```
+
+```{r}
+summary(regressor)
+```
+
+
+Prognozowanie wartości Life na zbiorze testowym “test_set_nowy” i modelu “regressor_nowy”.
+```{r}
+y_pred_nowy = predict(regressor_nowy, newdata = test_set_nowy)
+y_pred_nowy
+```
+
+
+Porównanie “y_pred” i “y_pred_nowy” z “Life”.
+
+1. “y_pred_nowy” jest bardziej przybliżony, różnica 0,45
+
+2. “y_pred” jest bardziej przybliżony, różnica 2,37
+
+3. “y_pred_nowy” jest bardziej przybliżony, różnica 2,77
+
+4. “y_pred_nowy” jest bardziej przybliżony, różnica 0,19
+
+5. “y_pred_nowy” jest bardziej przybliżony, różnica 0,53
+
+6. “y_pred_nowy” jest bardziej przybliżony, różnica 0,25
+
+7. “y_pred” jest bardziej przybliżony, różnica 4,95
+
+8. “y_pred_nowy” jest bardziej przybliżony, różnica 1,72
+
+9. “y_pred” jest bardziej przybliżony, różnica 1,16
+
+10. “y_pred” jest bardziej przybliżony, różnica 0,75
+
+11. “y_pred_nowy” jest bardziej przybliżony, różnica 0,13
+
+12. “y_pred_nowy” jest bardziej przybliżony, różnica 5,48
+
+13. “y_pred” jest bardziej przybliżony, różnica 5,78
+
+14. “y_pred_nowy” jest bardziej przybliżony, różnica 3,38
+
+15. “y_pred_nowy” jest bardziej przybliżony, różnica 0,19
+
+16. “y_pred” jest bardziej przybliżony, różnica 0,39
+
+17. “y_pred_nowy” jest bardziej przybliżony, różnica 0,8
+
+18. “y_pred_nowy” jest bardziej przybliżony, różnica 1,18
+
+19. “y_pred_nowy” jest bardziej przybliżony, różnica 2,83
+
+20. “y_pred_nowy” jest bardziej przybliżony, różnica 2,79
+
+21. “y_pred_nowy” jest bardziej przybliżony, różnica 0,20
+
+22. “y_pred_nowy” jest bardziej przybliżony, różnica 1,73
+
+23. “y_pred” jest bardziej przybliżony, różnica 0,55
+
+24. “y_pred_nowy” jest bardziej przybliżony, różnica 1,2
+
+25. “y_pred” jest bardziej przybliżony, różnica 2,42
+
+26. “y_pred_nowy” jest bardziej przybliżony, różnica 1,13
+
+27. “y_pred” jest bardziej przybliżony, różnica 0,20
+
+28. “y_pred_nowy” jest bardziej przybliżony, różnica 20,22, anomalia
+
+29. “y_pred_nowy” jest bardziej przybliżony, różnica 2,37
+
+30. “y_pred” jest bardziej przybliżony, różnica 0,72
+
+31. “y_pred_nowy” jest bardziej przybliżony, różnica 1,19
+
+32. “y_pred” jest bardziej przybliżony, różnica 1,44
+
+33. “y_pred” jest bardziej przybliżony, różnica 2,52
+
+34. “y_pred_nowy” jest bardziej przybliżony, różnica 1,65
+
+35. “y_pred” jest bardziej przybliżony, różnica 0,75
+
+36. “y_pred” jest bardziej przybliżony, różnica 1,95
+
+37. “y_pred_nowy” jest bardziej przybliżony, różnica 4,93
+
+“y_pred_nowy” miał lepsze przybliżenie wyników w 23/37. W punkcie 28 doszło do anomalii, a
+różnica wyniku przypadku “y_pred_nowy” okazało się oddalone od wartości ze zbioru testującej w
+20,22, a “y_pred” w 46,02.
+```{r}
+y_pred = predict(regressor, newdata = test_set)
+y_pred
+```
+
+
+```{r}
+y_pred_nowy = predict(regressor_nowy, newdata = test_set_nowy)
+y_pred_nowy
+```
+
+
+
+# Rozdział 2 - Machine Learning
+
+
+## Multiple Linear Regression
+
+Ten kod w języku R ma na celu odczytanie pliku CSV z danymi z lokalizacji "C:\Users\Kacper\Desktop\Projekt Regression 2.0\Dane z 2015.csv" i przypisanie wynikowego zestawu danych do zmiennej dataset. Następnie kod wyświetla widok (tabelę) danych w przeglądarce.
+
+Ostatecznie, funkcja names(dataset) zwraca wektor zawierający nazwy kolumn w tym zestawie danych.
+```{r}
+dataset <-  read_csv("C:\\Users\\Kacper\\Desktop\\Projekt Regression 2.0\\Dane z 2015.csv")
+View(dataset)
+names(dataset)
+```
+
+
+Ten kod wprowadza pakiet dplyr, a następnie zmienia zestaw danych dataset, tak że wybiera wszystkie kolumny z wyjątkiem tych, które zostaną wymienione po -c (czyli Country, Year, Status, Alcohol, percentage expenditure, i Total expenditure).
+
+Następnie widok zmienionego zestawu danych jest wyświetlany w przeglądarce przy pomocy funkcji View(dataset).
+
+Ostatecznie, funkcja names(dataset) zwraca wektor zawierający nazwy pozostałych kolumn w tym zestawie danych.
+```{r}
+library("dplyr")
+dataset <- dataset %>% select(-c(Country, Year, Status, Alcohol,
+`percentage expenditure`, `Total expenditure`))
+View(dataset)
+names(dataset)
+```
+
+
+Ten kod zmienia nazwy kolumn w zestawie danych dataset na podane wektorowo nazwy, zgodnie z kolejnością kolumn w pliku CSV.
+
+Każda nowa nazwa kolumny jest przypisywana do wektora c("Life","Adult_M","Infant_D","H_B","Measles","BMI", "Under_D","Polio","Dipht","H/A", "GDP","Popl", "t_1-19", "t_5-9", "Income", "Schooling"), a następnie przypisywana do dataset za pomocą funkcji colnames(), która zmienia nazwy kolumn.
+
+Ostatecznie, funkcja names(dataset) zwraca wektor zawierający nowe nazwy kolumn w tym zestawie danych.
+```{r}
+colnames(dataset)<-c("Life","Adult_M","Infant_D","H_B","Measles","BMI",
+"Under_D","Polio","Dipht","H/A", "GDP","Popl", "t_1-19", "t_5-9", "Income",
+"Schooling")
+names(dataset)
+```
+
+
+Ten kod wprowadza kilka zmian do zestawu danych dataset, aby zastąpić brakujące wartości średnią wartości w danej kolumnie. Konkretnie, używa funkcji ifelse() do sprawdzenia, czy wartość w danej komórce jest brakująca, a następnie zastępuje ją średnią wartości z danej kolumny, wykorzystując funkcję ave().
+
+Poniżej znajdują się szczegółowe wyjaśnienia dla każdej kolumny:
+
+* H_B: jeśli wartość jest brakująca, to zastępuje ją średnią wartości z kolumny H_B.
+* BMI: jeśli wartość jest brakująca, to zastępuje ją średnią wartości z kolumny BMI.
+* GDP: jeśli wartość jest brakująca, to zastępuje ją średnią wartości z kolumny GDP.
+* Popl: jeśli wartość jest brakująca, to zastępuje ją średnią wartości z kolumny Popl.
+* t_1-19: jeśli wartość jest brakująca, to zastępuje ją średnią wartości z kolumny t_1-19.
+* t_5-9: jeśli wartość jest brakująca, to zastępuje ją średnią wartości z kolumny t_5-9.
+* Income: jeśli wartość jest brakująca, to zastępuje ją średnią wartości z kolumny Income.
+* Schooling: jeśli wartość jest brakująca, to zastępuje ją średnią wartości z kolumny Schooling.
+
+Na koniec, kod wyświetla zmieniony zestaw danych w przeglądarce przy pomocy funkcji View(dataset).
+```{r}
+dataset$H_B = ifelse(is.na(dataset$H_B),
+ ave(dataset$H_B, FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$H_B)
+
+dataset$BMI = ifelse(is.na(dataset$BMI ),
+ ave(dataset$BMI , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$BMI )
+
+dataset$GDP = ifelse(is.na(dataset$GDP ),
+ ave(dataset$GDP , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$GDP )
+
+dataset$Popl = ifelse(is.na(dataset$Popl ),
+ ave(dataset$Popl , FUN = function(x) mean(x, na.rm
+= TRUE)),
+dataset$Popl )
+
+dataset$`t_1-19` = ifelse(is.na(dataset$`t_1-19` ),
+ ave(dataset$`t_1-19` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset$`t_1-19` )
+
+dataset$`t_5-9` = ifelse(is.na(dataset$`t_5-9` ),
+ ave(dataset$`t_5-9` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset$`t_5-9` )
+
+dataset$Income = ifelse(is.na(dataset$Income ),
+ ave(dataset$Income , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset$Income )
+
+dataset$Schooling = ifelse(is.na(dataset$Schooling ),
+ ave(dataset$Schooling , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset$Schooling )
+
+View(dataset)
+```
+
+
+Ten kod dzieli zbiór danych dataset na zbiór treningowy i testowy w stosunku 80:20, wykorzystując funkcję sample.split() z pakietu caTools. W szczególności, wywołuje funkcję sample.split(dataset Life, SplitRatio = 0.8), która losowo dzieli dane na dwa zbiory zgodnie z daną proporcją. Argument dataset$Life oznacza, że wykorzystujemy kolumnę "Life" jako wektor klasyfikacyjny, który decyduje, do którego zbioru zostanie przypisany każdy wiersz.
+
+Następnie wykorzystuje funkcję subset() do utworzenia dwóch podzbiorów danych:
+
+training_set: zbiór treningowy, który zawiera 80% losowo wybranych wierszy z dataset (tj. te, które mają wartość TRUE w wektorze split).
+test_set: zbiór testowy, który zawiera pozostałe 20% wierszy (tj. te, które mają wartość FALSE w wektorze split).
+Ostatecznie, nazwy utworzonych podzbiorów danych nie są zmieniane, ale możesz je zmienić, jeśli chcesz, wykorzystując funkcję colnames().
+```{r}
+library(caTools)
+set.seed(123)
+split = sample.split(dataset$Life, SplitRatio = 0.8)
+training_set_mult = subset(dataset, split == TRUE)
+test_set_mult = subset(dataset, split == FALSE)
+```
+
+
+Kod wyświetla zestaw training_set w przeglądarce przy pomocy funkcji View().
+```{r}
+View(training_set_mult )
+```
+
+
+Kod wyświetla zestaw test_set w przeglądarce przy pomocy funkcji View().
+```{r}
+View(test_set_mult )
+```
+
+Kod standaryzuje dane w training_set za pomocą funkcji scale, a następnie otworzył przeglądarkę danych do wizualnej inspekcji wynikowych przeskalowanych danych.
+```{r}
+training_set_mult = scale(training_set_mult)
+View(training_set_mult )
+```
+
+
+Kod standaryzuje dane w test_set za pomocą funkcji scale, a następnie otworzył przeglądarkę danych do wizualnej inspekcji wynikowych przeskalowanych danych.
+```{r}
+test_set_mult = scale(test_set_mult)
+View(test_set_mult )
+```
+
+
+Ten kod R służy do dopasowania modelu regresji liniowej do danych znajdujących się w training_set i uzyskania podsumowania wyników.
+
+Linia regressor = lm(formula = Life ~ ., data = as.data.frame(training_set)) tworzy obiekt modelu regresji liniowej regressor, który jest dopasowany do danych znajdujących się w training_set. W tym przypadku Life jest zmienną zależną, a . oznacza, że używane są wszystkie pozostałe kolumny jako zmienne niezależne.
+```{r}
+mult_reg = lm(formula = Life ~ .,
+               data = as.data.frame(training_set_mult))
+```
+
+
+Ten kod wykonuje regresję liniową między zmiennej odpowiedzi Life (wskaźnik oczekiwanej długości życia) a zestawem zmiennych objaśniających w ramce danych training_set.
+
+Interpretacja wyników:
+
+* Współczynniki: estymator wskazuje, jak zmienia się wartość zmiennej odpowiedzi wraz ze zmianami jednostki zmiennej objaśniającej. Współczynniki z wartością p poniżej 0,05 są uważane za istotne, co oznacza, że istnieje istotny statystycznie związek między tą zmienną objaśniającą a zmienną odpowiedzi.
+* W przypadku naszych danych Adult_M (współczynnik -0,3161) oraz Income (współczynnik 0,5088) są silnie związane z długością życia.
+* Residuals: Wartości te reprezentują różnice między rzeczywistymi wartościami zmiennej odpowiedzi (Life) a wartościami przewidywanymi przez model.
+* Residual standard error: Mierzy, jak dokładnie model dopasowuje się do danych.
+* Multiple R-squared: Wartość ta wskazuje, jak dobrze dopasowany jest model do danych. W przypadku naszych danych, współczynnik R kwadrat wynosi 0,8768, co oznacza, że 87,68% zmienności zmiennej odpowiedzi jest wyjaśnione przez zmienne objaśniające w naszym modelu.
+* F-statistic: Test ten porównuje nasz model z modelem, który nie zawiera żadnych zmiennych objaśniających. Ma on duże znaczenie w statystycznej istotności naszego modelu i wynosi 61,22 z 15 i 129 stopniami swobody.
+* p-value: Wartość p informuje nas o prawdopodobieństwie, że nie ma żadnego związku między zmiennymi objaśniającymi a zmienną odpowiedzi. Dla każdej zmiennej objaśniającej widzimy wartość p. Najmniejsze wartości p (<0,05) są uważane za istotne, co oznacza, że istnieje istotny statystycznie związek między tą zmienną objaśniającą a zmienną odpowiedzi.
+```{r}
+summary(mult_reg )
+```
+
+Ten kod wykonuje kierunkową selekcję zmiennych z wykorzystaniem algorytmu schodkowego ("stepwise") i kierunkiem "backward". W każdej iteracji algorytmu, zmienna, która ma najwyższą wartość p-wartości (najmniej istotną statystycznie), zostaje usunięta z modelu. Proces ten jest powtarzany aż do momentu, gdy żadna zmienna nie zostanie usunięta lub usunięcie jednej zmiennej nie zwiększy znacząco jakości modelu.
+
+W wyniku tego kodu zostanie wybrany najlepszy model regresji liniowej z zmiennymi wybrane w procesie selekcji z kierunkiem "backward". Model ten będzie miał najmniejszą liczbę zmiennych, które są istotne statystycznie w celu wyjaśnienia zmienności zmiennej zależnej "Life".
+```{r}
+mult_reg  <- 
+step(lm(Life ~ .,
+        data=as.data.frame(training_set_mult)),direction="backward")
+```
+Finalnie model ten próbuje przewidzieć wartości zmiennej zależnej "Life" na podstawie siedmiu zmiennych niezależnych: "Adult_M", "Infant_D", "H_B", "Under_D", "H/A", "t_5-9" i "Income".
+
+Współczynniki dla każdej zmiennej niezależnej wyrażone są w jednostkach wartości zmiennej zależnej (w tym przypadku "Life") na jednostkę zmiennej niezależnej. Na przykład, każdy wzrost o jedną jednostkę zmiennej "Adult_M" spowoduje spadek średniej wartości zmiennej "Life" o 0,3141 jednostki.
+
+R kwantyfikuje jakość dopasowania modelu do danych, używając współczynnika determinacji R-kwadrat (Multiple R-squared), który w tym przypadku wynosi 0,8754. Oznacza to, że zmienne niezależne wyjaśniają 87,54% zmienności zmiennej zależnej "Life". Współczynnik ten może zostać skorygowany przy użyciu współczynnika korekty R-kwadrat (Adjusted R-squared), który w tym przypadku wynosi 0,8691. F-statystyka i p-wartość F-statystyki służą do testowania ogólnej istotności modelu, a w tym przypadku wartość F-statystyki wynosi 137,6 i jest bardzo istotna (p-wartość <2,2e-16).
+```{r}
+summary(mult_reg )
+```
+
+Wynik predykcji to lista wartości numerycznych, które są oszacowanymi wartościami dla zmiennej objaśnianej (Life) na podstawie modelu regresji liniowej wytrenowanego na danych treningowych. Ta lista wartości numerycznych reprezentuje prognozowane wartości dla danych testowych, które zostały przekazane do funkcji predict(). Można porównać te wartości z rzeczywistymi wartościami dla zmiennej objaśnianej w danych testowych, aby oszacować jakość predykcji modelu.
+```{r}
+y_pred_mult = predict(mult_reg, newdata = as.data.frame(test_set_mult))
+y_pred_mult
+```
+
+
+Kod który generuje tabelę porównawczą między rzeczywistymi wartościami Life w "test_set", a przewidywanymi wartościami "Life" na podstawie modelu "regressor".
+```{r}
+test_set_mult_table <- data.frame(test_set_mult[,1], y_pred_mult)
+colnames(test_set_mult_table) <- c("test dataset", "test predict")
+head(test_set_mult_table)
+```
+
+
+## Polynomial Regression
+```{r}
+dataset_poly <-  read_csv("C:\\Users\\Kacper\\Desktop\\Projekt Regression 2.0\\Dane z 2015.csv")
+
+library("dplyr")
+dataset_poly <- dataset_poly %>% select(-c(Country, Year, Status, Alcohol, `percentage expenditure`, `Total expenditure`))
+
+colnames(dataset_poly)<-c("Life","Adult_M","Infant_D","H_B","Measles","BMI", "Under_D","Polio","Dipht","H/A", "GDP","Popl", "t_1-19", "t_5-9", "Income", "Schooling")
+
+dataset_poly$H_B = ifelse(is.na(dataset_poly$H_B),
+ ave(dataset_poly$H_B, FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset_poly$H_B)
+
+dataset_poly$BMI = ifelse(is.na(dataset_poly$BMI ),
+ ave(dataset_poly$BMI , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset_poly$BMI )
+
+dataset_poly$GDP = ifelse(is.na(dataset_poly$GDP ),
+ ave(dataset_poly$GDP , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset_poly$GDP )
+
+dataset_poly$Popl = ifelse(is.na(dataset_poly$Popl ),
+ ave(dataset_poly$Popl , FUN = function(x) mean(x, na.rm
+= TRUE)),
+dataset_poly$Popl )
+
+dataset_poly$`t_1-19` = ifelse(is.na(dataset_poly$`t_1-19` ),
+ ave(dataset_poly$`t_1-19` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset_poly$`t_1-19` )
+
+dataset_poly$`t_5-9` = ifelse(is.na(dataset_poly$`t_5-9` ),
+ ave(dataset_poly$`t_5-9` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset_poly$`t_5-9` )
+
+dataset_poly$Income = ifelse(is.na(dataset_poly$Income ),
+ ave(dataset_poly$Income , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset_poly$Income )
+
+dataset_poly$Schooling = ifelse(is.na(dataset_poly$Schooling ),
+ ave(dataset_poly$Schooling , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset_poly$Schooling )
+
+View(dataset_poly)
+```
+
+
+
+```{r}
+dataset_poly$Adult_M = dataset_poly$Adult_M^2
+dataset_poly$Infant_D = dataset_poly$Infant_D^2
+dataset_poly$H_B = dataset_poly$H_B^2
+dataset_poly$Measles = dataset_poly$Measles^2
+dataset_poly$BMI = dataset_poly$BMI^2
+dataset_poly$Under_D = dataset_poly$Under_D^2
+dataset_poly$Polio = dataset_poly$Polio^2
+dataset_poly$Dipht = dataset_poly$Dipht^2
+dataset_poly$`H/A` = dataset_poly$`H/A`^2
+dataset_poly$GDP = dataset_poly$GDP^2
+dataset_poly$Popl = dataset_poly$Popl^2
+dataset_poly$`t_1-19` = dataset_poly$`t_1-19`^2
+dataset_poly$`t_5-9` = dataset_poly$`t_5-9`^2
+dataset_poly$Income  = dataset_poly$Income^2
+dataset_poly$Schooling  = dataset_poly$Schooling^2
+```
+
+```{r}
+# install.packages('caTools')
+library(caTools)
+set.seed(123)
+split = sample.split(dataset_poly$Life, SplitRatio = 0.8)
+training_set_poly = subset(dataset_poly, split == TRUE)
+test_set_poly = subset(dataset_poly, split == FALSE)
+```
+
+
+Kod pozostawia pierwsze dane nie spotęgowane.
+```{r}
+#dataset_poly$Adult_M = poly(dataset_poly$Adult_M, degree = 2, raw = TRUE)
+#dataset_poly$Infant_D = poly(dataset_poly$Infant_D, degree = 2, raw = TRUE)
+#dataset_poly$H_B = poly(dataset_poly$H_B, degree = 2, raw = TRUE)
+#dataset_poly$Measles = poly(dataset_poly$Measles, degree = 2, raw = TRUE)
+#dataset_poly$BMI = poly(dataset_poly$BMI, degree = 2, raw = TRUE)
+#dataset_poly$Under_D = poly(dataset_poly$Under_D, degree = 2, raw = TRUE)
+#dataset_poly$Polio = poly(dataset_poly$Polio, degree = 2, raw = TRUE)
+#dataset_poly$Dipht = poly(dataset_poly$Dipht, degree = 2, raw = TRUE)
+#dataset_poly$`H/A` = poly(dataset_poly$`H/A`, degree = 2, raw = TRUE)
+#dataset_poly$GDP = poly(dataset_poly$GDP, degree = 2, raw = TRUE)
+#dataset_poly$Popl = poly(dataset_poly$Popl, degree = 2, raw = TRUE)
+#dataset_poly$`t_1-19` = poly(dataset_poly$`t_1-19`, degree = 2, raw = TRUE)
+#dataset_poly$`t_5-9` = poly(dataset_poly$`t_5-9`, degree = 2, raw = TRUE)
+#dataset_poly$Income = poly(dataset_poly$Income, degree = 2, raw = TRUE)
+#dataset_poly$Schooling = poly(dataset_poly$Schooling, degree = 2, raw = TRUE)
+```
+
+
+```{r}
+poly_reg = lm(formula = Life ~ .,
+              data = training_set_poly)
+```
+
+
+```{r}
+summary(poly_reg)
+```
+
+
+```{r}
+poly_reg <- 
+step(lm(Life ~ .,
+        data=training_set_poly, direction="backward"))
+
+```
+
+
+```{r}
+summary(poly_reg)
+```
+
+
+```{r}
+y_pred_poly = predict(poly_reg, newdata = as.data.frame(test_set_poly))
+y_pred_poly
+```
+
+
+```{r}
+accuracy = sqrt(mean(y_pred_poly / test_set_poly$Life)^2)
+accuracy
+```
+
+## SVR
+```{r}
+dataset <-  read_csv("C:\\Users\\Kacper\\Desktop\\Projekt Regression 2.0\\Dane z 2015.csv")
+library("dplyr")
+dataset <- dataset %>% select(-c(Country, Year, Status, Alcohol,
+`percentage expenditure`, `Total expenditure`))
+colnames(dataset)<-c("Life","Adult_M","Infant_D","H_B","Measles","BMI",
+"Under_D","Polio","Dipht","H/A", "GDP","Popl", "t_1-19", "t_5-9", "Income",
+"Schooling")
+dataset$H_B = ifelse(is.na(dataset$H_B),
+ ave(dataset$H_B, FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$H_B)
+
+dataset$BMI = ifelse(is.na(dataset$BMI ),
+ ave(dataset$BMI , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$BMI )
+
+dataset$GDP = ifelse(is.na(dataset$GDP ),
+ ave(dataset$GDP , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$GDP )
+
+dataset$Popl = ifelse(is.na(dataset$Popl ),
+ ave(dataset$Popl , FUN = function(x) mean(x, na.rm
+= TRUE)),
+dataset$Popl )
+
+dataset$`t_1-19` = ifelse(is.na(dataset$`t_1-19` ),
+ ave(dataset$`t_1-19` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset$`t_1-19` )
+
+dataset$`t_5-9` = ifelse(is.na(dataset$`t_5-9` ),
+ ave(dataset$`t_5-9` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset$`t_5-9` )
+
+dataset$Income = ifelse(is.na(dataset$Income ),
+ ave(dataset$Income , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset$Income )
+
+dataset$Schooling = ifelse(is.na(dataset$Schooling ),
+ ave(dataset$Schooling , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset$Schooling )
+
+View(dataset)
+```
+
+
+```{r}
+# install.packages('caTools')
+library(caTools)
+set.seed(123)
+split = sample.split(dataset$Life, SplitRatio = 0.8)
+training_set_svm = subset(dataset, split == TRUE)
+test_set_svm = subset(dataset, split == FALSE)
+```
+
+```{r}
+View(training_set_svm)
+```
+
+```{r}
+View(test_set_svm)
+```
+
+```{r}
+training_set_svm = scale(training_set_svm)
+test_set_svm = scale(test_set_svm)
+```
+
+
+```{r}
+library(e1071)
+svm_reg= svm(formula = Life ~ .,
+                data = training_set_svm,
+                type = 'eps-regression',
+                kernel = 'radial')
+```
+
+```{r}
+summary(svm_reg)
+```
+
+```{r}
+y_pred_svm = predict(svm_reg, newdata = as.data.frame(test_set_svm))
+y_pred_svm
+```
+
+##  Decision Tree Regression
+```{r}
+dataset <-  read_csv("C:\\Users\\Kacper\\Desktop\\Projekt Regression 2.0\\Dane z 2015.csv")
+library("dplyr")
+dataset <- dataset %>% select(-c(Country, Year, Status, Alcohol,
+`percentage expenditure`, `Total expenditure`))
+colnames(dataset)<-c("Life","Adult_M","Infant_D","H_B","Measles","BMI",
+"Under_D","Polio","Dipht","H/A", "GDP","Popl", "t_1-19", "t_5-9", "Income",
+"Schooling")
+dataset$H_B = ifelse(is.na(dataset$H_B),
+ ave(dataset$H_B, FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$H_B)
+
+dataset$BMI = ifelse(is.na(dataset$BMI ),
+ ave(dataset$BMI , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$BMI )
+
+dataset$GDP = ifelse(is.na(dataset$GDP ),
+ ave(dataset$GDP , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$GDP )
+
+dataset$Popl = ifelse(is.na(dataset$Popl ),
+ ave(dataset$Popl , FUN = function(x) mean(x, na.rm
+= TRUE)),
+dataset$Popl )
+
+dataset$`t_1-19` = ifelse(is.na(dataset$`t_1-19` ),
+ ave(dataset$`t_1-19` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset$`t_1-19` )
+
+dataset$`t_5-9` = ifelse(is.na(dataset$`t_5-9` ),
+ ave(dataset$`t_5-9` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset$`t_5-9` )
+
+dataset$Income = ifelse(is.na(dataset$Income ),
+ ave(dataset$Income , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset$Income )
+
+dataset$Schooling = ifelse(is.na(dataset$Schooling ),
+ ave(dataset$Schooling , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset$Schooling )
+
+dataset = data.frame(dataset)
+
+View(dataset)
+```
+```{r}
+library(caTools)
+set.seed(123)
+split = sample.split(dataset$Life, SplitRatio = 0.8)
+training_set_dec = subset(dataset, split == TRUE)
+test_set_dec = subset(dataset, split == FALSE)
+```
+
+```{r}
+training_set_dec= scale(training_set_dec)
+test_set_dec = scale(test_set_dec)
+```
+
+```{r}
+View(training_set_dec)
+```
+
+
+```{r}
+View(test_set_dec)
+```
+
+
+```{r}
+library(rpart)
+training_set_dec = data.frame(training_set_dec)
+dec_reg = rpart(formula = Life ~ .,
+                  data = training_set_dec,
+                  control = rpart.control(minsplit = 1))
+```
+
+
+```{r}
+summary(dec_reg)
+```
+```{r}
+dec_reg
+```
+
+```{r}
+y_pred_dec = predict(dec_reg, newdata = as.data.frame(test_set_dec))
+y_pred_dec
+```
+
+```{r}
+y_pred_dec = predict(dec_reg, data.frame(Adult_M = 100, Infant_D = 56, H_B = 90, Measles = 150, BMI = 42, Under_D = 80, Polio = 70, Dipht = 80, `H/A` = 3.5, GDP = 300, Popl = 10000000, `t_1-19` = 6, `t_5-9` = 4, Income = 0.5, Schooling = 4.5))
+y_pred_dec
+```
+
+## Random Forest Regression
+```{r}
+dataset <-  read_csv("C:\\Users\\Kacper\\Desktop\\Projekt Regression 2.0\\Dane z 2015.csv")
+library("dplyr")
+dataset <- dataset %>% select(-c(Country, Year, Status, Alcohol,
+`percentage expenditure`, `Total expenditure`))
+colnames(dataset)<-c("Life","Adult_M","Infant_D","H_B","Measles","BMI",
+"Under_D","Polio","Dipht","H/A", "GDP","Popl", "t_1-19", "t_5-9", "Income",
+"Schooling")
+dataset$H_B = ifelse(is.na(dataset$H_B),
+ ave(dataset$H_B, FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$H_B)
+
+dataset$BMI = ifelse(is.na(dataset$BMI ),
+ ave(dataset$BMI , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$BMI )
+
+dataset$GDP = ifelse(is.na(dataset$GDP ),
+ ave(dataset$GDP , FUN = function(x) mean(x, na.rm =
+TRUE)),
+ dataset$GDP )
+
+dataset$Popl = ifelse(is.na(dataset$Popl ),
+ ave(dataset$Popl , FUN = function(x) mean(x, na.rm
+= TRUE)),
+dataset$Popl )
+
+dataset$`t_1-19` = ifelse(is.na(dataset$`t_1-19` ),
+ ave(dataset$`t_1-19` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset$`t_1-19` )
+
+dataset$`t_5-9` = ifelse(is.na(dataset$`t_5-9` ),
+ ave(dataset$`t_5-9` , FUN = function(x) mean(x,
+na.rm = TRUE)),
+ dataset$`t_5-9` )
+
+dataset$Income = ifelse(is.na(dataset$Income ),
+ ave(dataset$Income , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset$Income )
+
+dataset$Schooling = ifelse(is.na(dataset$Schooling ),
+ ave(dataset$Schooling , FUN = function(x)
+mean(x, na.rm = TRUE)),
+ dataset$Schooling )
+
+dataset = data.frame(dataset)
+
+View(dataset)
+```
+
+
+```{r}
+library(caTools)
+set.seed(123)
+split = sample.split(dataset$Life, SplitRatio = 0.8)
+training_set_frt = subset(dataset, split == TRUE)
+test_set_frt = subset(dataset, split == FALSE)
+```
+
+
+```{r}
+training_set_frt= scale(training_set_frt)
+test_set_frt = scale(test_set_frt)
+```
+
+
+```{r}
+library(randomForest)
+set.seed(1234)
+frt_reg= randomForest(Life ~ ., 
+                      data = training_set_frt,
+                      ntree = 500)
+
+```
+
+
+```{r}
+summary(frt_reg)
+```
+
+
+```{r}
+```
+
